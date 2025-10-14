@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+:root{
+  --uc-red: #E00122;
+  --uc-red-dark: #B8011C;
+  --uc-black: #000000;
+  --uc-white: #FFFFFF;
+  --uc-gray-200: oklch(86% 0.01 300);
+}
+body {
+  background-color: #f7f7f7;
+}
