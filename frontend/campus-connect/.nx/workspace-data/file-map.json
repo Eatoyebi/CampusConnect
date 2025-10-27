@@ -1,0 +1,204 @@
+{
+  "version": "6.0",
+  "nxVersion": "21.6.5",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {},
+    "nonProjectFiles": [
+      {
+        "file": ".claude/CLAUDE.md",
+        "hash": "5445926183268957976"
+      },
+      {
+        "file": ".cursor/rules/cursor.mdc",
+        "hash": "12053321777312474647"
+      },
+      {
+        "file": ".editorconfig",
+        "hash": "4165385352547808172"
+      },
+      {
+        "file": ".gemini/GEMINI.md",
+        "hash": "5445926183268957976"
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "5445926183268957976"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "8735202651818384803"
+      },
+      {
+        "file": ".junie/guidelines.md",
+        "hash": "5445926183268957976"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "5331566439708925252"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "17038929134016848735"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "5336636969995539451"
+      },
+      {
+        "file": ".windsurf/rules/guidelines.md",
+        "hash": "5445926183268957976"
+      },
+      {
+        "file": "README.md",
+        "hash": "16946240490966204034"
+      },
+      {
+        "file": "angular.json",
+        "hash": "206106008662247980"
+      },
+      {
+        "file": "package.json",
+        "hash": "8123270170353153621"
+      },
+      {
+        "file": "public/favicon.ico",
+        "hash": "3988961587069885523"
+      },
+      {
+        "file": "src/app/app.config.ts",
+        "hash": "16577217916543110499"
+      },
+      {
+        "file": "src/app/app.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/app.html",
+        "hash": "4419683888100521251"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "hash": "16616916100398826851"
+      },
+      {
+        "file": "src/app/app.spec.ts",
+        "hash": "9739124271895942816"
+      },
+      {
+        "file": "src/app/app.ts",
+        "hash": "11398534221547833344"
+      },
+      {
+        "file": "src/app/pages/announcements/announcements.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/announcements/announcements.html",
+        "hash": "5492413607384269970"
+      },
+      {
+        "file": "src/app/pages/announcements/announcements.spec.ts",
+        "hash": "8388125260512807784"
+      },
+      {
+        "file": "src/app/pages/announcements/announcements.ts",
+        "hash": "3117183726424507832"
+      },
+      {
+        "file": "src/app/pages/chat/chat.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/chat/chat.html",
+        "hash": "6641864801869732289"
+      },
+      {
+        "file": "src/app/pages/chat/chat.spec.ts",
+        "hash": "3890361543145905440"
+      },
+      {
+        "file": "src/app/pages/chat/chat.ts",
+        "hash": "6559033523582648966"
+      },
+      {
+        "file": "src/app/pages/home/home.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/home/home.html",
+        "hash": "8980251380215388944"
+      },
+      {
+        "file": "src/app/pages/home/home.spec.ts",
+        "hash": "15916373779840153226"
+      },
+      {
+        "file": "src/app/pages/home/home.ts",
+        "hash": "16855731684863435081"
+      },
+      {
+        "file": "src/app/pages/maintenance/maintenance.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/maintenance/maintenance.html",
+        "hash": "1243632877800918816"
+      },
+      {
+        "file": "src/app/pages/maintenance/maintenance.spec.ts",
+        "hash": "16315870922831301704"
+      },
+      {
+        "file": "src/app/pages/maintenance/maintenance.ts",
+        "hash": "9635990576652129316"
+      },
+      {
+        "file": "src/app/shared/navbar/navbar.css",
+        "hash": "12499812388165435494"
+      },
+      {
+        "file": "src/app/shared/navbar/navbar.html",
+        "hash": "15047276681094224545"
+      },
+      {
+        "file": "src/app/shared/navbar/navbar.spec.ts",
+        "hash": "10573077195457950798"
+      },
+      {
+        "file": "src/app/shared/navbar/navbar.ts",
+        "hash": "13808614691262440312"
+      },
+      {
+        "file": "src/assets/UClogo.png",
+        "hash": "8854970299742330542"
+      },
+      {
+        "file": "src/index.html",
+        "hash": "11622252581642981306"
+      },
+      {
+        "file": "src/main.ts",
+        "hash": "15944248449879998907"
+      },
+      {
+        "file": "src/styles.css",
+        "hash": "16622318354751035500"
+      },
+      {
+        "file": "tsconfig.app.json",
+        "hash": "8369321240499881643"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "16977045106029113580"
+      },
+      {
+        "file": "tsconfig.spec.json",
+        "hash": "647795770471502525"
+      }
+    ]
+  },
+  "externalNodesHash": "3244421341483603138"
+}
