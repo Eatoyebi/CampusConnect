@@ -1,0 +1,21 @@
+{
+  "name": "campus-connect",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "backend",
+    "frontend/campus-connect"
+  ],
+  "scripts": {
+    "build": "lerna run build --stream",
+    "dev": "lerna run dev --parallel --stream",
+    "lint": "lerna run lint --stream",
+    "test": "lerna run test --stream",
+    "start": "concurrently \"npm run dev -w @campus/backend\" \"npm run start -w @campus/frontend\""
+    },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "lerna": "^9.0.0",
+    "nodemon": "^3.0.1"
+  }
+}
