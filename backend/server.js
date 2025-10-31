@@ -32,7 +32,7 @@ const io = new SocketIOServer(server, {
 
 //Real-time chat events
 io.on("connection", (socket) => {
-  console.log("connected: ${socket.id}");
+  console.log(`connected: ${socket.id}`);
 
   socket.on("join_room", (room) => {
     socket.join(room);
