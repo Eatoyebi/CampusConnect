@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", (room) => {
     socket.join(room);
-    console.log(" ${socket.id} joined ${room}");
+    console.log(`${socket.id} joined ${room}`);
   });
 
   socket.on("send_message", (data) => {
