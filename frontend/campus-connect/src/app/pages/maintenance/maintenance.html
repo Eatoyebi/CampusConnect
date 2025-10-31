@@ -1,5 +1,6 @@
-<div class ="maintenance-form-container">
     <h2> New Maintenance Request</h2>
+
+<div class ="maintenance-form-container">
 
     <h3>Issue Details</h3>
 
@@ -24,6 +25,19 @@
         <textarea id="issueDescription" name="description" [(ngModel)]="newRequest.description" required></textarea>
     </div>
 
+    <div class ="button-container">
     <button type="submit">Submit Request</button>
+    </div>
+
   </form>
+        <h3>Previous Requests</h3>
+        <uL>
+            <li *ngFor="let request of requests">
+                <strong>Name:</strong> {{request.name}} | 
+                <strong>M-Number:</strong> {{request.mNumber}} | 
+                <strong>Location:</strong> {{request.location}} | 
+                <strong>Description:</strong> {{request.description}} | 
+                <strong>Status:</strong> {{request.status}}
+            </li>   
+        </uL>
   </div>
