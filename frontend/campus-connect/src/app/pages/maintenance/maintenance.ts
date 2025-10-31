@@ -14,16 +14,17 @@ export class Maintenance {
     name: '',
     mNumber: '',
     location: '',
-    description: ''
+    description: '',
+    status: 'Pending'
   }; //object to hold new request data
 
   requests: any[] = []; //array of requests
 
 onSubmit() {
   //Logic to submit maintenance request
-    if (this.newRequest.name && this.newRequest.mNumber && this.newRequest.location && this.newRequest.description) { //are all fields filled
+    if (this.newRequest.name && this.newRequest.mNumber && this.newRequest.location && this.newRequest.description) { //are all fields filled?
       this.requests.push({ ...this.newRequest }); //add new request to requests array
-      this.newRequest = { name: '', mNumber: '', location: '', description: '' }; //reset form
+      this.newRequest = { name: '', mNumber: '', location: '', description: '', status: 'pending'}; //reset form
       alert('Maintenance request submitted successfully!');
   } else {
       alert('Please fill out all fields before pressing submit.');

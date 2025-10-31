@@ -1,6 +1,7 @@
-<div class =maintenance-form-container>
-    <h2> Maintenance Request Form</h2>
-</div>
+<div class ="maintenance-form-container">
+    <h2> New Maintenance Request</h2>
+
+    <h3>Issue Details</h3>
 
   <form (ngSubmit)="onSubmit()" #maintenanceForm="ngForm">
     <div class="form-group">
@@ -14,14 +15,15 @@
     </div>
 
     <div class="form-group">
-        <label for="issueLocation">Location of the issue:</label>
-        <input type="text" id="issueLocation" name="location" [(ngModel)]="newRequest.location" title="Location of the issue" placeholder="Enter the location of the issue" required/>
+        <label for="issueLocation">Location Of Issue:</label>
+        <textarea id="issueLocation" name="location" [(ngModel)]="newRequest.location"required></textarea>
     </div>
 
     <div class="form-group">
-        <label for="issueDescription">Describe the Issue:</label>
+        <label for="issueDescription">Describe The Issue:</label>
         <textarea id="issueDescription" name="description" [(ngModel)]="newRequest.description" required></textarea>
     </div>
 
     <button type="submit">Submit Request</button>
   </form>
+  </div>
