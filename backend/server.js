@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
   socket.on("send_message", (data) => {
     // data: { room, author, message, time }
     io.to(data.room).emit("receive_message", data);
-    console.log(" ${data.author} @ ${data.room}: ${data.message}");
+    console.log(`${data.author} @ ${data.room}: ${data.message}`);
   });
 
   socket.on("disconnect", () => {
