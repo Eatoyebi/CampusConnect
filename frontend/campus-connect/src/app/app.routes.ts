@@ -14,8 +14,14 @@ export const routes: Routes = [
   {
     path: 'announcements',
     loadComponent: () =>
-      import('./pages/announcements/announcements').then(m => m.Announcements)
+      import('./pages/ra-announcements/ra-announcements.component').then(m => m.RaAnnouncements)
+
   },
+  {
+    path: 'student-announcements',
+    loadComponent: () =>
+      import('./pages/student-announcements/student-announcements.component').then(m => m.StudentAnnouncementsComponent)
+  },  
   {
     path: 'maintenance',
     loadComponent: () =>

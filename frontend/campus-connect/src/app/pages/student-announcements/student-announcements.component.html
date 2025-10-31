@@ -1,0 +1,20 @@
+<h2 class="main-title">Announcements</h2>
+<h3 class="recent-title">Recent ({{ count }})</h3>
+<label class="category-filter" style="margin-left:1rem;">
+  Filter by category:
+  <select [(ngModel)]="selectedCategory">
+    <option value="">All</option>
+    <option *ngFor="let c of categories" [value]="c">{{ c | titlecase }}</option>
+  </select>
+</label>
+<div *ngIf="!filteredItems.length" class="empty-note">No announcements yet.</div>
+<div class="announcement-list">
+  <div *ngFor="let a of filteredItems" class="announcement-item">
+    <div class="item-top">
+      <span class="pill">{{ a.category | titlecase }}</span>
+      <span class="title">{{ a.title }}</span>
+      <span class="date">{{ a.createdAt | date:'short' }}</span>
+    </div>
+    <div class="item-msg">{{ a.message }}</div>
+  </div>
+</div>
