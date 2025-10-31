@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
-//(Commenitng out for now)app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//(Commenting out for now)app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 //Create HTTP server + Socket.IO
 const server = createServer(app);
