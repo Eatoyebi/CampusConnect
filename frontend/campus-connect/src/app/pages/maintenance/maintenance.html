@@ -4,34 +4,69 @@
 
     <h3>Issue Details</h3>
 
-  <form (ngSubmit)="onSubmit()" #maintenanceForm="ngForm">
+  <form (ngSubmit)="submitRequest(maintenanceForm)" #maintenanceForm="ngForm">
     <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" [(ngModel)]="newRequest.name" required/>
+        <input 
+        type="text" 
+        id="name" name="name" 
+        [(ngModel)]="newRequest.name" 
+        #name="ngModel"
+        required
+        [class.invalid]="name.invalid && name.touched"
+        />
+        <div class="error" *ngIf="name.invalid && name.touched">Name is required</div>
     </div>
 
     <div class="form-group">
         <label for ="m-Number">M-Number:</label>
-        <input type="text" id="m-Number" name="m-Number" [(ngModel)]="newRequest.mNumber" required/>    
+        <input 
+        type="text" 
+        id="m-Number" 
+        name="m-Number" 
+        [(ngModel)]="newRequest.mNumber" 
+        required
+        #mNumber="ngModel"
+        [class.invalid]="mNumber.invalid && mNumber.touched"
+        />    
+        <div class="error" *ngIf="mNumber.invalid && mNumber.touched">M-Number is required</div>
     </div>
 
     <div class="form-group">
         <label for="issueLocation">Location Of Issue:</label>
-        <textarea id="issueLocation" name="location" [(ngModel)]="newRequest.location"required></textarea>
+        <textarea 
+        id="issueLocation" 
+        name="location" 
+        [(ngModel)]="newRequest.location"
+        required
+        #location="ngModel"
+        [class.invalid]="location.invalid && location.touched"
+        >
+    </textarea>
+    <div class="error" *ngIf="location.invalid && location.touched">Please list the issue location</div>
     </div>
 
     <div class="form-group">
         <label for="issueDescription">Describe The Issue:</label>
-        <textarea id="issueDescription" name="description" [(ngModel)]="newRequest.description" required></textarea>
+        <textarea 
+        id="issueDescription" 
+        name="description" 
+        [(ngModel)]="newRequest.description" 
+        required
+        #description="ngModel"
+        [class.invalid]="description.invalid && description.touched"
+        >
+    </textarea>
+    <div class="error" *ngIf="description.invalid && description.touched">Please describe the issue</div>
     </div>
 
     <div class ="button-container">
-    <button type="submit">Submit Request</button>
+    <button type="submit" [disabled]="maintenanceForm.invalid">Submit Request</button>
     </div>
 
   </form>
         <h3>Previous Requests</h3>
-        <uL>
+        <ul>
             <li *ngFor="let request of requests">
                 <strong>Name:</strong> {{request.name}} | 
                 <strong>M-Number:</strong> {{request.mNumber}} | 
@@ -39,5 +74,5 @@
                 <strong>Description:</strong> {{request.description}} | 
                 <strong>Status:</strong> {{request.status}}
             </li>   
-        </uL>
+        </ul>
   </div>

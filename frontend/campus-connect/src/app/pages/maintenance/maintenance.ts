@@ -1,33 +1,48 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
+
+interface MaintenanceRequest {
+    name: string;
+    mNumber: string;
+    location: string
+    description: string;
+    status: string; 
+}
 @Component({
   selector: 'app-maintenance',
   imports: [CommonModule, FormsModule],
   templateUrl: './maintenance.html',
   styleUrl: './maintenance.css'
 })
+
+
 export class Maintenance {
 
-    newRequest = {
+    newRequest: MaintenanceRequest = { //object to hold new request data
     name: '',
     mNumber: '',
     location: '',
     description: '',
     status: 'Pending'
-  }; //object to hold new request data
+  }; 
 
-  requests: any[] = []; //array of requests
+  requests: MaintenanceRequest[] = []; //array of requests
 
-onSubmit() {
+submitRequest(form: NgForm) {
   //Logic to submit maintenance request
-    if (this.newRequest.name && this.newRequest.mNumber && this.newRequest.location && this.newRequest.description) { //are all fields filled?
+    if (form.valid)  //are all fields filled?
+      { 
+      this.newRequest.status = 'Pending'; //set status to pending when a new ticket is submitted
       this.requests.push({ ...this.newRequest }); //add new request to requests array
-      this.newRequest = { name: '', mNumber: '', location: '', description: '', status: 'pending'}; //reset form
-      alert('Maintenance request submitted successfully!');
-  } else {
-      alert('Please fill out all fields before pressing submit.');
+      this.newRequest = { 
+        name: '', 
+        mNumber: '', location: '', 
+        description: '', 
+        status: 'Pending'
+      }; //reset form
+      form.resetForm(); //reset form validation state
   }
   }
 }
