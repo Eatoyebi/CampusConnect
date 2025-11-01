@@ -1,1 +1,30 @@
-<p>chat works!</p>
+<header class="chat-header">
+  <div class="brand">
+    <span class="claw" aria-hidden="true"></span>
+    <span>Campus Connect</span>
+  </div>
+  <div class="room-pill"># {{ room }}</div>
+</header>
+
+<div #scrollContainer class="chat-stream" (scroll)="onScroll()">
+  <div *ngFor="let msg of messages; trackBy: trackByIdx"
+       class="row"
+       [class.mine]="isMine(msg)">
+    <div class="bubble">
+      <div class="meta">
+        <span class="author">{{ isMine(msg) ? 'You' : msg.author }}</span>
+        <span class="time">{{ msg.time }}</span>
+      </div>
+      <div class="text">{{ msg.message }}</div>
+    </div>
+  </div>
+</div>
+
+<form class="composer" (submit)="$event.preventDefault(); send()">
+  <input id="chat-input"
+         [(ngModel)]="message"
+         name="message"
+         placeholder="Type a message…"
+         autocomplete="off"/>
+  <button type="submit" class="send-btn">Send</button>
+</form>

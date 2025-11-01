@@ -9,7 +9,7 @@ export const routes: Routes = [
   {
     path: 'chat',
     loadComponent: () =>
-      import('./pages/chat/chat').then(m => m.Chat)
+      import('./pages/chat/chat').then(m => m.ChatComponent)
   },
   {
     path: 'announcements',
