@@ -43,7 +43,12 @@ export class ChatService {
 
   onMessage(): Observable<ChatMsg> {
     return new Observable(observer => {
-      this.socket.on('receive_message', (data: ChatMsg) => observer.next(data));
+      const handler = (data: ChatMsg) => observer.next(data);
+      this.socket.on('receive_message', handler);
+      // Teardown logic: remove the handler when unsubscribed
+      return () => {
+        this.socket.off('receive_message', handler);
+      };
     });
   }
 }
