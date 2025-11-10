@@ -1,29 +1,21 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
-
-interface Announcement {
-  id: number;
-  title: string;
-  message: string;
-  category: string;
-  createdAt: Date;
-}
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormsModule } from '@angular/forms';
+import { AnnouncementsService, Announcement } from './announcements.service';
 
 @Component({
-  selector: 'app-announcements',
-  templateUrl: './announcements.html',
-  styleUrls: ['./announcements.css'],
-  imports: [CommonModule, ReactiveFormsModule],
+  selector: 'app-ra-announcements',
+  templateUrl: './ra-announcements.component.html',
+  styleUrls: ['./ra-announcements.component.css'],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,],
   standalone: true
 })
-export class Announcements {
+export class RaAnnouncements {
   categories = ['general', 'floor', 'building'];
-  private _items: Announcement[] = [];
   form: FormGroup;
   private _error = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private announcementsService: AnnouncementsService) {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(120)]],
       category: [this.categories[0], Validators.required],
@@ -44,21 +36,9 @@ export class Announcements {
       category: this.form.value.category,
       createdAt: new Date()
     };
-    this._items.unshift(announcement);
+    this.announcementsService.addAnnouncement(announcement);
     this.form.reset({category: this.categories[0]});
     this._error = '';
-  }
-
-  items() {
-    return this._items;
-  }
-
-  count() {
-    return this._items.length;
-  }
-
-  delete(id: number) {
-    this._items = this._items.filter(a => a.id !== id);
   }
 
   error() {

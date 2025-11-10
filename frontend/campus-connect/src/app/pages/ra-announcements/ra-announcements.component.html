@@ -1,11 +1,10 @@
-<h2 class="main-title">Announcements</h2>
-
+<h2 class="main-title">Create Announcement</h2>
 <div class="announce-card">
   <form [formGroup]="form" (ngSubmit)="submit()" class="announce-form">
     <div class="input-row">
       <label>
         <span>Title</span>
-        <input formControlName="title" placeholder="Fire drill this Friday" />
+        <input formControlName="title" placeholder="Announcement Title" />
       </label>
       <label>
         <span>Category</span>
@@ -24,21 +23,4 @@
     <button type="submit" class="btn">Post</button>
     <div class="err" *ngIf="error()">{{ error() }}</div>
   </form>
-</div>
-
-<hr />
-
-<h3 class="recent-title">Recent ({{ count() }})</h3>
-<div *ngIf="!items().length" class="empty-note">No announcements yet.</div>
-
-<div class="announcement-list">
-  <div *ngFor="let a of items()" class="announcement-item">
-    <div class="item-top">
-      <span class="pill">{{ a.category | titlecase }}</span>
-      <span class="title">{{ a.title }}</span>
-      <span class="date">{{ a.createdAt | date:'short' }}</span>
-    </div>
-    <div class="item-msg">{{ a.message }}</div>
-    <button class="btn-danger" (click)="delete(a.id)">Delete</button>
-  </div>
 </div>
