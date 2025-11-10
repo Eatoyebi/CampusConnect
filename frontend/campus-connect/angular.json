@@ -16,15 +16,15 @@
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [{
-              "glob": "**/*",
-              "input": "public"
-            },{
-              "glob": "**/*",
-              "input": "src/assets",
-              "output": "/assets/"
-            }],
-            "styles": ["src/styles.css"]
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -70,22 +70,15 @@
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [{
-              "glob": "**/*",
-              "input": "public"
-            },
-            {
-              "glob": "**/*",
-              "input": "src/assets",
-              "output": "/assets/"
-            }],
-            "styles": ["src/styles.css"]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ]
           }
         }
       }

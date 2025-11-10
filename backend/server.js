@@ -1,17 +1,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-import path from "path";
-import { fileURLToPath } from "url";
-import userProfileRoutes from "./routes/userProfileRoutes.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || 5050;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -29,5 +23,4 @@ app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
-app.use("/api/profile", userProfileRoutes);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
