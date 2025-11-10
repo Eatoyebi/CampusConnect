@@ -5,7 +5,6 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// Setup Multer for profile image uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -17,7 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Create a new user profile
+// CREATE user profile
 router.post("/", upload.single("profileImage"), async (req, res) => {
   try {
     const { name, email, bio, major, graduationYear } = req.body;
@@ -39,33 +38,35 @@ router.post("/", upload.single("profileImage"), async (req, res) => {
   }
 });
 
-// Get a user profile by ID
+// READ user profile by ID
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
+
+    // Return full URL for image if it exists
+    const profileData = user.toObject();
+    if (user.profileImage) {
+      profileData.profileImage = `${req.protocol}://${req.get("host")}/uploads/${user.profileImage}`;
+    }
+
+    res.json(profileData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching user profile" });
   }
 });
 
-// Update a user profile
+// UPDATE user profile
 router.put("/:id", upload.single("profileImage"), async (req, res) => {
   try {
     const { name, email, bio, major, graduationYear } = req.body;
-
-    const updates = {
-      name,
-      email,
-      bio,
-      major,
-      graduationYear,
-    };
+    const updates = { name, email, bio, major, graduationYear };
 
     if (req.file) {
       updates.profileImage = req.file.filename;
+    } else if (req.body.profileImage === "") {
+      updates.profileImage = null;
     }
 
     const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, {
