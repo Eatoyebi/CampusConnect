@@ -22,7 +22,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": [
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -74,13 +76,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "styles": [
+              "src/styles.css"
+            ]
           }
         }
       }
