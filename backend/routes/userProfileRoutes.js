@@ -5,12 +5,17 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
+const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (!allowedExtensions.includes(ext)) {
+      return cb(new Error('Invalid file type. Only images are allowed.'));
+    }
+    cb(null, Date.now() + ext);
   },
 });
 
