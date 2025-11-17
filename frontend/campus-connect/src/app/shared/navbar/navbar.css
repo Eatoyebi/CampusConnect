@@ -65,4 +65,25 @@
   box-shadow: 0 0 8px rgba(224, 1, 34, 0.5);
 }
 
+.profile-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-btn img {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 0 0 transparent);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.profile-btn:hover img {
+  transform: translateY(-1px);
+  opacity: 0.8;
+}
 /* https://www.uc.edu/about/marketing-communications/brand-guide/visual-identity/color.html */

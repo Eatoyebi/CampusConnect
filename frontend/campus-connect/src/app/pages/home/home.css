@@ -1,0 +1,178 @@
+.home-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 16px 64px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.hero-card {
+  display: inline-block;
+  background: #F4F4F5;
+  padding: 24px 32px;
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04);
+  animation: heroFadeIn 0.6s ease-out;
+}
+
+.hero-hello {
+  font-size: 1.2rem;
+  color: #c5161d;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.hero-title {
+  font-size: 1.6rem;
+  margin: 0 0 8px;
+}
+
+.hero-text {
+  margin: 0;
+  color: #555;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
+  gap: 24px;
+  align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #F4F4F5;
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.section-subtitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.tips-card {
+  margin-top: 12px;
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tip-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.tip-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.tip-message {
+  margin: 8px 0 12px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.tip-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-start;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  background: #EAEAEB;
+  cursor: pointer;
+}
+
+.dot--active {
+  width: 18px;
+  background: #c5161d;
+}
+
+.announcements-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-card {
+  margin-top: 12px;
+  text-align: center;
+  color: #666;
+}
+
+.announcement-card {
+  display: flex;
+  margin-top: 12px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.accent-bar {
+  width: 4px;
+  background: #c5161d;
+}
+
+.announcement-content {
+  padding: 14px 16px 14px 14px;
+}
+
+.announcement-title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.announcement-message {
+  margin: 0 0 8px;
+  color: #555;
+}
+
+.announcement-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

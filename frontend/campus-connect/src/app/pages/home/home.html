@@ -1,1 +1,79 @@
-<p>home works!</p>
+<div class="home-wrapper" *ngIf="user as u">
+  <section class="hero">
+    <div class="hero-card">
+      <p class="hero-hello">Hi {{ u.name }},</p>
+      <h1 class="hero-title">Welcome back to CampusConnect!</h1>
+      <p class="hero-text">
+        Stay in the loop with what’s happening in your building,
+        from announcements to late night events and need-to-know updates.
+      </p>
+    </div>
+  </section>
+
+  <section class="main-grid">
+    <div class="tips-column">
+      <div class="section-header">
+        <h2>Building Tips</h2>
+        <span class="section-subtitle">Little reminders to make dorm life smoother</span>
+      </div>
+
+      <div class="card tips-card" *ngIf="activeTip as tip">
+        <div class="tip-header">
+          <div class="tip-icon" *ngIf="tip.icon">{{ tip.icon }}</div>
+          <h3 class="tip-title">{{ tip.title }}</h3>
+        </div>
+        <p class="tip-message">
+          {{ tip.message }}
+        </p>
+
+        <div class="tip-dots" *ngIf="tips.length > 1">
+          <button
+            *ngFor="let t of tips; let i = index"
+            type="button"
+            class="dot"
+            [class.dot--active]="i === activeTipIndex"
+            (click)="activeTipIndex = i">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="announcements-column">
+      <div class="section-header">
+        <h2>Recent Announcements</h2>
+        <span class="section-subtitle">Posted by your RA</span>
+      </div>
+
+      <div *ngIf="!recentAnnouncements.length" class="card empty-card">
+        <p>No announcements yet. Check back soon for updates.</p>
+      </div>
+
+      <article
+        *ngFor="let ann of recentAnnouncements"
+        class="card announcement-card">
+        <div class="accent-bar"></div>
+        <div class="announcement-content">
+          <h3 class="announcement-title">{{ ann.title }}</h3>
+          <p class="announcement-message">
+            {{ ann.message }}
+          </p>
+          <p class="announcement-meta">
+            {{ ann.createdAt | date: 'MMM d, y, h:mm a' }}
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+
+<div class="home-wrapper" *ngIf="!user">
+  <section class="hero">
+    <div class="hero-card">
+      <p class="hero-hello">Hi there,</p>
+      <h1 class="hero-title">Welcome to CampusConnect!</h1>
+      <p class="hero-text">
+        We’re loading your info. Refresh if this takes too long.
+      </p>
+    </div>
+  </section>
+</div>
