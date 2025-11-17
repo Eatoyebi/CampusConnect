@@ -1,0 +1,48 @@
+<div class="profile-container">
+
+  <div class="profile-header">
+    <img 
+      class="profile-pic"
+      [src]="user.profileImage || 'https://cdn-icons-png.flaticon.com/512/847/847969.png'" 
+    />
+
+    <h2>{{ user.name }}</h2>
+    <p class="major">{{ user.major }}</p>
+
+    <button class="edit-btn" (click)="toggleEdit()">
+      {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+    </button>
+  </div>
+
+  <div class="profile-section">
+    <h3>About Me</h3>
+
+    <div *ngIf="!isEditing">
+      <p>{{ user.bio }}</p>
+    </div>
+
+    <textarea *ngIf="isEditing" [(ngModel)]="user.bio"></textarea>
+  </div>
+
+  <div class="profile-section">
+    <h3>Housing Info</h3>
+
+    <div *ngIf="!isEditing">
+      <p>Building: {{ user.housing?.building }}</p>
+      <p>Room: {{ user.housing?.roomNumber }}</p>
+    </div>
+
+    <div *ngIf="isEditing">
+      <input placeholder="Building" [(ngModel)]="user.housing.building" />
+      <input placeholder="Room Number" [(ngModel)]="user.housing.roomNumber" />
+    </div>
+  </div>
+
+  <button 
+    *ngIf="isEditing"
+    class="save-btn"
+    (click)="saveChanges()">
+    Save Changes
+  </button>
+
+</div>
