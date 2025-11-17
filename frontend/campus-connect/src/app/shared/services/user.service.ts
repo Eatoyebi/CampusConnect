@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  major: string;
+  graduationYear: number;
+  bio: string;
+  profileImage?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +20,11 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUser(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getUser(id: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
-  updateUser(id: string, body: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, body);
+  updateUser(id: string, body: FormData | Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}`, body);
   }
 }

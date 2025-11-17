@@ -13,9 +13,10 @@ const PORT = process.env.BACKEND_PORT || 5050;
 app.use(cors());
 app.use(express.json());
 
+app.use("/uploads", express.static("uploads"));
+
 import userRoutes from "./routes/userRoutes.js";
 app.use("/api/users", userRoutes);
-
 
 // MongoDB Connection
 mongoose
