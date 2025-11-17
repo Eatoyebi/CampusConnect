@@ -54,57 +54,57 @@ export class UserProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
-  if (!this.user?._id) return;
+    if (!this.user?._id) return;
 
-  const formData = new FormData();
-  Object.entries(this.updatedUser).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      formData.append(key, value.toString());
-    }
-  });
-
-  if (this.selectedFile) {
-    formData.append('profileImage', this.selectedFile);
-  }
-
-  this.userService.updateUser(this.user._id, formData).subscribe({
-    next: (updated) => {
-      this.user = {
-        ...updated,
-        profileImage: updated.profileImage?.startsWith('http')
-          ? updated.profileImage
-          : `http://localhost:5050/uploads/${updated.profileImage}`
-      };
-      this.previewImage = null;
-      this.editing = false;
-    },
-    error: (err) => {
-      console.error(err);
-      this.errorMessage = 'Error updating profile.';
-    }
-  });
-}
-
-removeImage(): void {
-  if (!this.user?._id) return;
-
-  if (confirm('Are you sure you want to remove your profile picture?')) {
     const formData = new FormData();
-    formData.append('profileImage', '');
+    Object.entries(this.updatedUser).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        formData.append(key, value.toString());
+      }
+    });
+
+    if (this.selectedFile) {
+      formData.append('profileImage', this.selectedFile);
+    }
+
     this.userService.updateUser(this.user._id, formData).subscribe({
       next: (updated) => {
         this.user = {
           ...updated,
-          profileImage: '/profile-icon.svg'
+          profileImage: updated.profileImage?.startsWith('http')
+            ? updated.profileImage
+            : `http://localhost:5050/uploads/${updated.profileImage}`
         };
         this.previewImage = null;
-        this.selectedFile = null;
+        this.editing = false;
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Error removing profile image.';
+        this.errorMessage = 'Error updating profile.';
       }
     });
   }
-}
+
+  removeImage(): void {
+    if (!this.user?._id) return;
+
+    if (confirm('Are you sure you want to remove your profile picture?')) {
+      const formData = new FormData();
+      formData.append('profileImage', '');
+      this.userService.updateUser(this.user._id, formData).subscribe({
+        next: (updated) => {
+          this.user = {
+            ...updated,
+            profileImage: '/profile-icon.svg'
+          };
+          this.previewImage = null;
+          this.selectedFile = null;
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = 'Error removing profile image.';
+        }
+      });
+    }
+  }
 }
