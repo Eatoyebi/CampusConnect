@@ -26,7 +26,6 @@ export class Home implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Hard-coded user for now – same ID you used on the profile page
     const userId = '691256de5e28c208bd523047';
 
     this.userService.getUser(userId).subscribe({
