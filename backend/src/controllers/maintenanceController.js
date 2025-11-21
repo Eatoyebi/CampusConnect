@@ -1,5 +1,5 @@
 import {validationResult} from 'express-validator';
-import mainteanceTicket from '../models/maintenanceModel.js';
+import mainteanceTicket from '../models/maintenanceTicketModel.js';
 
 export const createMaintenanceTicket = async (req, res) => {
     //results forom Express Validator
@@ -24,7 +24,7 @@ export const getallMaintenanceTickets = async (req, res) => {
     try {
         const filter = {}; // Initialize an empty filter object
         if (req.query.status ) filter.status = req.query.status;
-        const tickets = await maintenanceTicket.find(filter).sort({ createdAt: -1}).lean();
+        const tickets = await maintenanceTicket.find(filter).sort({ createdAt: -1}).lean(); //sort by most recent
         return res.json(tickets);
     }
     catch (err) {

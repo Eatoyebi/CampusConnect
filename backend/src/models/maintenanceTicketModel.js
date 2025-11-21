@@ -6,11 +6,7 @@ const maintenanceTicketSchema = new mongoose.Schema({
     mNumber: { type: String, required: true, trim: true },
     location: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
-    status: {
-        type: String,
-        enum: ['Pending', 'In Progress', 'Completed/Closed'],
-        default: 'Pending'
-    },
+    status: {type: String, enum: ['Pending', 'In Progress', 'Completed/Closed'], default: 'Pending'},
     createdAt: { type: Date, default: Date.now},
     updatedAt: { type: Date, default: Date.now},
     assignedTo: { type: String, trim: true },
