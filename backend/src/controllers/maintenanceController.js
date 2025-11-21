@@ -1,5 +1,5 @@
 import {validationResult} from 'express-validator';
-import mainteanceTicket from '../models/maintenanceTicketModel.js';
+import maintenanceTicket from '../models/maintenanceTicketModel.js';
 
 export const createMaintenanceTicket = async (req, res) => {
     //results forom Express Validator
@@ -10,7 +10,7 @@ export const createMaintenanceTicket = async (req, res) => {
 
     //create new maintenance ticket
     try {
-        const newTicket = new mainteanceTicket({ name, mNumber, location, description, assignedTo, priority, attachments });
+        const newTicket = new maintenanceTicket({ name, mNumber, location, description, assignedTo, priority, attachments });
         const savedTicket = await newTicket.save();
         return res.status(201).json(savedTicket); //Ticket created
     } 

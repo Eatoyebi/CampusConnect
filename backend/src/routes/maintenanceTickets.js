@@ -11,7 +11,7 @@ router.post(
     [
         body('name').trim().notEmpty().withMessage('Name is required'),
         body('mNumber').trim().notEmpty().withMessage('M-Number is required')            
-            .matches((/^M\d{6,10}$/)).withMessage('Invalid M-Number format'),
+            .matches((/^M\d{10}$/)).withMessage('Invalid M-Number format'),
         body('location').trim().notEmpty().withMessage('Location is required'),
         body('description').trim().notEmpty().withMessage('Description is required'),
         body('priority').optional().isIn(['Low', 'Medium', 'High']).withMessage('Invalid priority value'),
