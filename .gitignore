@@ -1,2 +1,44 @@
-node_modules
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Build outputs
+dist/
+build/
+tmp/
+temp/
+
+# Angular
+.angular/
+.angular/cache/
+.angular/cache */
+src/**/*.js.map
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Environment
 .env
+.env.local
+.env.development
+.env.production
+
+# Uploads
+backend/uploads/
+
+# TypeScript
+*.tsbuildinfo
+
+# Lerna / Workspace
+lerna-debug.log
+pnpm-lock.yaml
