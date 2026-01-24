@@ -35,6 +35,7 @@ connectDB(process.env.MONGO_URI)
 
 // Mount routes
 app.use("/api/maintenance-tickets", ticketsRouter);
+app.use("/api/users", express.static(path.join(_dirname, "src/routes/userRoutes.js"))); // user routes
 
 // Base test route
 app.get("/", (req, res) => {

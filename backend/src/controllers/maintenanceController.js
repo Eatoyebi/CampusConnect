@@ -12,7 +12,7 @@ export const createMaintenanceTicket = async (req, res) => {
     try {
         const newTicket = new maintenanceTicket({ name, mNumber, location, description, assignedTo, priority, attachments });
         const savedTicket = await newTicket.save();
-        return res.status(201).json(savedTicket); //Ticket created
+        return res.status(201).json(savedTicket); //New ticket created
     } 
     catch (err) {
         console.error('createMaintenanceTicket error:', err);
@@ -46,7 +46,7 @@ export const updateTicketStatus = async (req, res) => {
 
     try {
         const update = { updatedAt: Date.now() };
-        if (status) update.status = status;
+        if (status) update.status = status; 
 
         //find ticket by id and update
         const ticket = await maintenanceTicket.findByIdAndUpdate(ticketId, { $set: update }, { new: true });
