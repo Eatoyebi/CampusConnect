@@ -1,7 +1,7 @@
 # Campus Connect
 
 ## Project Overview
-Campus Connect is a full stack monorepo application designed to improve how students interact with campus services. The system consists of an Angular frontend, a Node and Express backend, MongoDB for data persistence, and Socket.IO for real time communication. The goal of this project is to provide a responsive, student centered experience with live updates and reliable backend services.
+Campus Connect is a full-stack monorepo application designed to improve how students interact with campus services. The system consists of an Angular frontend, a Node and Express backend, MongoDB for data persistence, and Socket.IO for real time communication. The goal of this project is to provide a responsive, student centered experience with live updates and reliable backend services.
 
 ## Repository Structure
 • backend  
@@ -33,7 +33,7 @@ npm install
 
 ## Running the Project
 From the root of the repository, start the application using:
-npm start
+`npm start`
 
 This command starts both the backend API and the Angular frontend.
 
@@ -43,7 +43,7 @@ http://localhost:4200
 ## Demo Walkthrough
 To demonstrate the application:
 
-1. Start the project using npm start
+1. Start the project using `npm start`
 2. Open the frontend in a browser  
 3. Navigate through the main pages  
 4. Perform a core action such as creating a request or sending a message  
