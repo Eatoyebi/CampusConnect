@@ -52,8 +52,8 @@ To demonstrate the application:
 
 ## Architecture
 The following diagram illustrates the technical architecture of Campus Connect, including the frontend, backend, database, real time communication, and external services.
-![Campus Connect Architecture](docs/images/architecture-diagram.png)
+![Campus Connect Architecture](docs/images/Architecture.png)
 
 ## Features by Role
 A role and feature map is provided to help reviewers understand system scope:
-![Campus Connect Feature and Role Map](docs/images/feature-role-map.png)
+![Campus Connect Feature and Role Map](docs/images/Project_Mapping.png)
