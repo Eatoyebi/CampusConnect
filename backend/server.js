@@ -8,6 +8,7 @@ import { Server as SocketIOServer } from "socket.io";
 import mongoose from "mongoose";
 import { connectDB } from "./src/config/db.js"; 
 import ticketsRouter from "./src/routes/maintenanceTickets.js"; // maintenance routes
+import userRoutes from "./src/routes/userRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +16,8 @@ dotenv.config();
 // Fix __dirname in ES modules
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(_filename);
+
+app.use('/uploads',express.static('uploads'));
 
 // Create Express app
 const app = express();
@@ -24,6 +27,8 @@ const PORT = process.env.BACKEND_PORT || 5050;
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(_dirname, "../uploads"))); // serve static uploads
+app.use("/api/users", userRoutes);
+
 
 // Connect to MongoDB
 connectDB(process.env.MONGO_URI)
