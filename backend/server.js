@@ -5,63 +5,48 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
-import mongoose from "mongoose";
-import { connectDB } from "./src/config/db.js"; 
-import ticketsRouter from "./src/routes/maintenanceTickets.js"; // maintenance routes
+
+import { connectDB } from "./src/config/db.js";
+import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 
-// Load environment variables
 dotenv.config();
 
-// Fix __dirname in ES modules
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(_filename);
 
-app.use('/uploads',express.static('uploads'));
-
-// Create Express app
 const app = express();
 const PORT = process.env.BACKEND_PORT || 5050;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static(path.join(_dirname, "../uploads"))); // serve static uploads
+
+// serve static uploads from backend/uploads
+app.use("/uploads", express.static(path.join(_dirname, "uploads")));
+
 app.use("/api/users", userRoutes);
+app.use("/api/maintenance-tickets", ticketsRouter);
 
-
-// Connect to MongoDB
-connectDB(process.env.MONGO_URI)
+connectDB(process.env.MONGO_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
     console.error("MongoDB connection error:", err);
     process.exit(1);
   });
 
-// Mount routes
-app.use("/api/maintenance-tickets", ticketsRouter);
-app.use("/api/users", express.static(path.join(_dirname, "src/routes/userRoutes.js"))); // user routes
-
-// Base test route
 app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
-// Create HTTP server
-// Create HTTP server + Socket.IO
 const server = createServer(app);
 
-// Socket.IO setup
 const io = new SocketIOServer(server, {
   cors: {
-    origin: [
-      process.env.FRONTEND_ORIGIN || "http://localhost:4200",
-    ],
-    methods: ["GET", "POST"]
-  }
+    origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
+    methods: ["GET", "POST"],
+  },
 });
 
-// Real-time chat events
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
@@ -72,7 +57,6 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     io.to(data.room).emit("receive_message", data);
-    console.log(`${data.author} @ ${data.room}: ${data.message}`);
   });
 
   socket.on("disconnect", () => {
@@ -80,7 +64,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start Server (HTTP + WebSocket)
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

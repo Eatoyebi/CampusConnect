@@ -15,10 +15,6 @@ export class UserProfileComponent implements OnInit {
   private userService = inject(UserService);
   private router = inject(Router);
 
-goToAdminLookup(): void {
-  this.router.navigate(['/admin/users']);
-}
-
   user: User | null = null;
   loading = true;
   errorMessage = '';
@@ -29,8 +25,8 @@ goToAdminLookup(): void {
   previewImage: string | ArrayBuffer | null = null;
 
   ngOnInit(): void {
-  this.loading = true;
-  this.errorMessage = '';
+    this.loading = true;
+    this.errorMessage = '';
 
   this.userService.getCurrentUser().subscribe({
     next: (data) => {
@@ -44,6 +40,10 @@ goToAdminLookup(): void {
     }
   });
 }
+
+  goToAdminLookup(): void {
+    this.router.navigate(['/admin/users']);
+  }
 
   toggleEdit(): void {
     if (!this.user) return;
