@@ -11,12 +11,10 @@ const UserSchema = new mongoose.Schema(
       default: "student",
     },
 
-    profile: {
-      major: { type: String },
-      graduationYear: { type: String },
-      bio: { type: String },
-      profileImage: { type: String },
-    },
+    major: { type: String },
+    graduationYear: { type: String },
+    bio: { type: String },
+    profileImage: { type: String },
 
     // student housing info
     housing: {
