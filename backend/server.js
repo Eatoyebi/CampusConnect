@@ -1,36 +1,57 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import mongoose from "mongoose";
+import { connectDB } from "./src/config/db.js"; 
+import ticketsRouter from "./src/routes/maintenanceTickets.js"; // maintenance routes
+import userRoutes from "./src/routes/userRoutes.js";
 
+// Load environment variables
 dotenv.config();
 
+// Fix __dirname in ES modules
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = path.dirname(_filename);
+
+app.use('/uploads',express.static('uploads'));
+
+// Create Express app
 const app = express();
 const PORT = process.env.BACKEND_PORT || 5050;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-
-app.use("/uploads", express.static("uploads"));
-
-import userRoutes from "./routes/userRoutes.js";
+app.use("/uploads", express.static(path.join(_dirname, "../uploads"))); // serve static uploads
 app.use("/api/users", userRoutes);
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.error("MongoDB connection error:", err));
 
-// Base API Test Route
+// Connect to MongoDB
+connectDB(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });
+
+// Mount routes
+app.use("/api/maintenance-tickets", ticketsRouter);
+app.use("/api/users", express.static(path.join(_dirname, "src/routes/userRoutes.js"))); // user routes
+
+// Base test route
 app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
+// Create HTTP server
 // Create HTTP server + Socket.IO
 const server = createServer(app);
+
+// Socket.IO setup
 const io = new SocketIOServer(server, {
   cors: {
     origin: [
@@ -42,11 +63,11 @@ const io = new SocketIOServer(server, {
 
 // Real-time chat events
 io.on("connection", (socket) => {
-  console.log(`connected: ${socket.id}`);
+  console.log(`Socket connected: ${socket.id}`);
 
   socket.on("join_room", (room) => {
     socket.join(room);
-    console.log(`${socket.id} joined ${room}`);
+    console.log(`${socket.id} joined room: ${room}`);
   });
 
   socket.on("send_message", (data) => {
@@ -55,7 +76,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log(`disconnected: ${socket.id}`);
+    console.log(`Socket disconnected: ${socket.id}`);
   });
 });
 
