@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MaintenaceProfileSchema = new mongoose.Schema({
+const MaintenanceProfileSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -15,4 +15,4 @@ const MaintenaceProfileSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model('MaintenanceProfile', MaintenaceProfileSchema);
+export default mongoose.model('MaintenanceProfile', MaintenanceProfileSchema);
