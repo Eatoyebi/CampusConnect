@@ -1,0 +1,73 @@
+.admin-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.search-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 18px 0 22px;
+}
+
+.search-input {
+  width: 420px;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.search-btn {
+  background: #c8102e;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.status {
+  margin-top: 12px;
+}
+
+.status.error {
+  color: #c8102e;
+}
+
+.results {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.user-card {
+  text-align: left;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  background: white;
+}
+
+.user-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.badge {
+  background: #f3f3f3;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.role-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
