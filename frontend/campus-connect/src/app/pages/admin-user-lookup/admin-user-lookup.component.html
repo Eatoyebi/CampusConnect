@@ -14,7 +14,7 @@
   <p class="status error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
   <div class="results" *ngIf="!loading && users.length > 0">
-    <div class="user-card" *ngFor="let u of users">
+    <div class="user-card" *ngFor="let u of users; trackBy: trackById">
       <div class="user-title">
         <strong>{{ u.name }}</strong>
         <span class="badge" *ngIf="u.role">{{ u.role | uppercase }}</span>
