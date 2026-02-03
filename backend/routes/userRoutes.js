@@ -157,14 +157,14 @@ router.put(
 
       if (name !== undefined) updates.name = name;
       if (email !== undefined) updates.email = email;
-      if (bio !== undefined) updates.bio = bio;
-      if (major !== undefined) updates.major = major;
-      if (graduationYear !== undefined) updates.graduationYear = graduationYear;
+      if (bio !== undefined) updates["profile.bio"] = bio;
+      if (major !== undefined) updates["profile.major"] = major;
+      if (graduationYear !== undefined) updates["profile.graduationYear"] = graduationYear;
 
       if (req.file) {
-        updates.profileImage = req.file.filename;
+        updates["profile.profileImage"] = req.file.filename;
       } else if (req.body.profileImage === "") {
-        updates.profileImage = null;
+        updates["profile.profileImage"] = null;
       }
 
       const updatedUser = await User.findByIdAndUpdate(req.user.id, updates, { new: true });
