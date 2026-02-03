@@ -1,9 +1,9 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
+import mongoose from "mongoose";
 import User from "../models/User.js";
 import requireAuth from "../middleware/requireAuth.js";
-import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -154,7 +154,6 @@ router.put(
       const { name, email, bio, major, graduationYear } = req.body;
 
       const updates = {};
-
       if (name !== undefined) updates.name = name;
       if (email !== undefined) updates.email = email;
       if (bio !== undefined) updates.bio = bio;
@@ -240,8 +239,11 @@ router.post("/", upload.single("profileImage"), validateUserInput, async (req, r
       bio,
       major,
       graduationYear,
-      profileImage: req.file ? req.file.filename : null,
     });
+
+    if (req.file) {
+      newUser.profileImage = req.file.filename;
+    }
 
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
@@ -253,6 +255,17 @@ router.post("/", upload.single("profileImage"), validateUserInput, async (req, r
       });
     }
     res.status(500).json({ message: "Error creating user profile", error: error.message });
+  }
+});
+
+// Get all users
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find().select("name email role major graduationYear profileImage raAssignment");
+    const result = users.map((u) => attachProfileImageUrl(req, u));
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users" });
   }
 });
 
@@ -274,7 +287,6 @@ router.put("/:id", upload.single("profileImage"), validateUserUpdate, async (req
     const { name, email, bio, major, graduationYear } = req.body;
 
     const updates = {};
-
     if (name !== undefined) updates.name = name;
     if (email !== undefined) updates.email = email;
     if (bio !== undefined) updates.bio = bio;
@@ -287,10 +299,7 @@ router.put("/:id", upload.single("profileImage"), validateUserUpdate, async (req
       updates.profileImage = null;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-    });
-
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
     if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
     res.json(attachProfileImageUrl(req, updatedUser));
@@ -302,6 +311,17 @@ router.put("/:id", upload.single("profileImage"), validateUserUpdate, async (req
       });
     }
     res.status(500).json({ message: "Error updating user profile", error: error.message });
+  }
+});
+
+// Delete by id
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await User.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "User not found" });
+    res.json({ message: "User deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting user" });
   }
 });
 
