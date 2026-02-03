@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { createMaintenanceTicket, getallMaintenanceTickets, updateTicketStatus } from '../controllers/maintenanceTicketController.js';
+import { createMaintenanceTicket, getAllMaintenanceTickets, updateTicketStatus } from '../controllers/maintenanceTicketController.js';
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.post(
 
 // GET /api/maintenance-tickets
 
-router.get('/', getallMaintenanceTickets);
+router.get('/', getAllMaintenanceTickets);
 
 // PATCH /api/maintenance-tickets/:id/status
 router.patch('/:id/status', [
