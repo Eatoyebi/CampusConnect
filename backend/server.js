@@ -18,6 +18,11 @@ app.use("/uploads", express.static("uploads"));
 import userRoutes from "./routes/userRoutes.js";
 app.use("/api/users", userRoutes);
 
+import chatRoutes from "./routes/chatRoutes.js";
+app.use("/api/chat", chatRoutes);
+
+import ChatMessage from "./models/ChatMessage.js";
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
@@ -44,14 +49,47 @@ const io = new SocketIOServer(server, {
 io.on("connection", (socket) => {
   console.log(`connected: ${socket.id}`);
 
-  socket.on("join_room", (room) => {
+  // UPDATED: join_room now also returns message history to that client
+  socket.on("join_room", async (room) => {
     socket.join(room);
     console.log(`${socket.id} joined ${room}`);
+
+    try {
+      const history = await ChatMessage.find({ room })
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .lean();
+
+      // Send history only to the user who joined, in chronological order
+      socket.emit("chat_history", history.reverse());
+    } catch (err) {
+      console.error("Error loading chat history:", err);
+      socket.emit("chat_error", { message: "Failed to load chat history." });
+    }
   });
 
-  socket.on("send_message", (data) => {
-    io.to(data.room).emit("receive_message", data);
-    console.log(`${data.author} @ ${data.room}: ${data.message}`);
+  // UPDATED: save message to MongoDB before broadcasting
+  socket.on("send_message", async (data) => {
+    try {
+      const room = data?.room;
+      const author = data?.author;
+      const message = data?.message;
+
+      if (!room || !author || !message || !message.trim()) return;
+
+      const saved = await ChatMessage.create({
+        room,
+        author,
+        message: message.trim(),
+        authorId: data.authorId,
+      });
+
+      io.to(room).emit("receive_message", saved);
+      console.log(`${author} @ ${room}: ${message}`);
+    } catch (err) {
+      console.error("Error saving chat message:", err);
+      socket.emit("chat_error", { message: "Failed to send message." });
+    }
   });
 
   socket.on("disconnect", () => {
@@ -63,3 +101,5 @@ io.on("connection", (socket) => {
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+

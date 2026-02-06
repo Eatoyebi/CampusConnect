@@ -26,12 +26,25 @@ export class ChatComponent implements AfterViewChecked {
     // Subscribe to my socket id
     this.chat.getMyId().subscribe(id => this.ownId = id);
 
-    // Join the room
+    // ✅ NEW: load chat history when joining/reconnecting
+    this.chat.onHistory().subscribe((history) => {
+      this.messages = history.map(m => ({
+        ...m,
+        // ensure time exists for UI
+        time: m.time ?? (m.createdAt ? new Date(m.createdAt).toLocaleTimeString() : '')
+      }));
+      this.queueScroll();
+    });
+
+    // Join the room (server responds with chat_history)
     this.chat.joinRoom(this.room);
 
-    // Listen for messages from server
+    // Listen for real-time messages from server
     this.chat.onMessage().subscribe((m) => {
-      this.messages.push(m);
+      this.messages.push({
+        ...m,
+        time: m.time ?? (m.createdAt ? new Date(m.createdAt).toLocaleTimeString() : m.time)
+      });
       this.queueScroll();
     });
   }
