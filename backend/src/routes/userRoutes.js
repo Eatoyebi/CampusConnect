@@ -3,7 +3,7 @@ import multer from "multer";
 import path from "path";
 import mongoose from "mongoose";
 import User from "../models/User.js";
-import requireAuth from "../middleware/requireAuth.js";
+import requireAuth from "../../middleware/requireAuth.js";
 
 const router = express.Router();
 
