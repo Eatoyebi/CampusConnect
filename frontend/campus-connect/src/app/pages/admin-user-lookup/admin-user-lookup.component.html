@@ -1,0 +1,39 @@
+<div class="admin-container">
+  <h2>Admin User Lookup</h2>
+
+  <div class="search-row">
+    <input
+      [(ngModel)]="query"
+      placeholder="Search by name, email, or major"
+      class="search-input"
+    />
+    <button (click)="search()" class="search-btn">Search</button>
+  </div>
+
+  <p class="status" *ngIf="loading">Searching...</p>
+  <p class="status error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="results" *ngIf="!loading && users.length > 0">
+    <div class="user-card" *ngFor="let u of users; trackBy: trackById">
+      <div class="user-title">
+        <strong>{{ u.name }}</strong>
+        <span class="badge" *ngIf="u.role">{{ u.role | uppercase }}</span>
+      </div>
+
+      <div class="user-detail"><strong>Email:</strong> {{ u.email }}</div>
+      <div class="user-detail" *ngIf="u.major"><strong>Major:</strong> {{ u.major }}</div>
+      <div class="user-detail" *ngIf="u.graduationYear !== undefined">
+        <strong>Grad Year:</strong> {{ u.graduationYear }}
+      </div>
+
+      <div class="role-section" *ngIf="u.role === 'ra'">
+        <div><strong>Building:</strong> {{ u.raAssignment?.building || 'Not assigned' }}</div>
+        <div><strong>Floor:</strong> {{ u.raAssignment?.floor || 'Not assigned' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="status" *ngIf="!loading && users.length === 0">
+    No results.
+  </p>
+</div>
