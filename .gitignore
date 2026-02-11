@@ -30,8 +30,9 @@ src/**/*.js.map
 # Environment
 .env
 .env.local
-.env.development
-.env.production
+.env.*
+uploads/
+
 
 # Uploads
 backend/uploads/
