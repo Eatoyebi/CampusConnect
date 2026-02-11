@@ -1,37 +1,48 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from './shared/guards/role.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('./pages/home/home').then(m => m.Home)
+    loadComponent: () => import('./pages/home/home').then(m => m.Home)
   },
   {
     path: 'chat',
-    loadComponent: () =>
-      import('./pages/chat/chat').then(m => m.ChatComponent)
+    canActivate: [roleGuard],
+    data: { roles: ['student', 'ra', 'admin'] },
+    loadComponent: () => import('./pages/chat/chat').then(m => m.ChatComponent)
   },
   {
     path: 'announcements',
-    loadComponent: () =>
-      import('./pages/ra-announcements/ra-announcements.component').then(m => m.RaAnnouncements)
-
+    canActivate: [roleGuard],
+    data: { roles: ['ra', 'admin'] },
+    loadComponent: () => import('./pages/ra-announcements/ra-announcements.component').then(m => m.RaAnnouncements)
   },
   {
     path: 'student-announcements',
-    loadComponent: () =>
-      import('./pages/student-announcements/student-announcements.component').then(m => m.StudentAnnouncementsComponent)
-  },  
+    canActivate: [roleGuard],
+    data: { roles: ['student', 'ra', 'admin'] },
+    loadComponent: () => import('./pages/student-announcements/student-announcements.component').then(m => m.StudentAnnouncementsComponent)
+  },
   {
     path: 'maintenance',
-    loadComponent: () =>
-      import('./pages/maintenance/maintenance').then(m => m.Maintenance)
+    canActivate: [roleGuard],
+    data: { roles: ['student', 'ra', 'admin'] },
+    loadComponent: () => import('./pages/maintenance/maintenance').then(m => m.Maintenance)
   },
   {
     path: 'profile',
-    loadComponent: () =>
-      import('./pages/user-profile/user-profile.component')
-        .then(m => m.UserProfileComponent)
+    canActivate: [roleGuard],
+    data: { roles: ['student', 'ra', 'admin'] },
+    loadComponent: () => import('./pages/user-profile/user-profile.component').then(m => m.UserProfileComponent)
   },
+  {
+    path: 'admin/users',
+    canActivate: [roleGuard],
+    data: { roles: ['admin'] },
+    loadComponent: () =>
+      import('./pages/admin-user-lookup/admin-user-lookup.component').then(m => m.AdminUserLookupComponent)
+  },
+
   { path: '**', redirectTo: '' }
 ];

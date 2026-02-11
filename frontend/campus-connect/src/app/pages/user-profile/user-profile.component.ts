@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService, User } from '../../shared/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,34 +13,61 @@ import { UserService, User } from '../../shared/services/user.service';
 })
 export class UserProfileComponent implements OnInit {
   private userService = inject(UserService);
+  private router = inject(Router);
+
   user: User | null = null;
   loading = true;
   errorMessage = '';
+
   editing = false;
   updatedUser: Partial<User> = {};
   selectedFile: File | null = null;
   previewImage: string | ArrayBuffer | null = null;
 
   ngOnInit(): void {
-    const userId = '691256de5e28c208bd523047';
-    this.userService.getUser(userId).subscribe({
-      next: (data) => {
-        console.log('User data received:', data);
-        this.user = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMessage = 'Unable to load profile.';
-        this.loading = false;
-      }
-    });
+    this.loading = true;
+    this.errorMessage = '';
+
+  this.userService.getCurrentUser().subscribe({
+    next: (data) => {
+      this.user = data;
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.errorMessage = 'Unable to load profile.';
+      this.loading = false;
+    }
+  });
+}
+
+  goToAdminLookup(): void {
+    this.router.navigate(['/admin/users']);
   }
 
   toggleEdit(): void {
-    if (this.user) {
-      this.editing = !this.editing;
-      this.updatedUser = { ...this.user };
+    if (!this.user) return;
+
+    this.editing = !this.editing;
+
+    if (this.editing) {
+      this.updatedUser = {
+        name: this.user.name,
+        email: this.user.email,
+        major: this.user.major,
+        graduationYear: this.user.graduationYear,
+        bio: this.user.bio,
+      };
+
+      const img = this.user.profileImage;
+      this.previewImage = img
+        ? (img.startsWith('http') ? img : `http://localhost:5050/uploads/${img}`)
+        : null;
+
+    } else {
+      this.updatedUser = {};
+      this.selectedFile = null;
+      this.previewImage = null;
     }
   }
 
@@ -54,29 +82,37 @@ export class UserProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
-    if (!this.user?._id) return;
+    const user = this.user;
+    if (!user?._id) return;
 
     const formData = new FormData();
-    Object.entries(this.updatedUser).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        formData.append(key, value.toString());
-      }
-    });
+
+    if (this.updatedUser.name != null) formData.append('name', String(this.updatedUser.name));
+    if (this.updatedUser.email != null) formData.append('email', String(this.updatedUser.email));
+    if (this.updatedUser.major != null) formData.append('major', String(this.updatedUser.major));
+    if (this.updatedUser.graduationYear != null) formData.append('graduationYear', String(this.updatedUser.graduationYear));
+    if (this.updatedUser.bio != null) formData.append('bio', String(this.updatedUser.bio));
 
     if (this.selectedFile) {
       formData.append('profileImage', this.selectedFile);
     }
 
-    this.userService.updateUser(this.user._id, formData).subscribe({
+    this.userService.updateUser(user._id, formData).subscribe({
       next: (updated) => {
         this.user = {
+          ...user,
           ...updated,
-          profileImage: updated.profileImage?.startsWith('http')
-            ? updated.profileImage
-            : `http://localhost:5050/uploads/${updated.profileImage}`
+          profileImage: updated.profileImage
+            ? (updated.profileImage.startsWith('http')
+                ? updated.profileImage
+                : `http://localhost:5050/uploads/${updated.profileImage}`)
+            : user.profileImage
         };
+
         this.previewImage = null;
+        this.selectedFile = null;
         this.editing = false;
+        this.updatedUser = {};
       },
       error: (err) => {
         console.error(err);
@@ -86,25 +122,31 @@ export class UserProfileComponent implements OnInit {
   }
 
   removeImage(): void {
-    if (!this.user?._id) return;
+    const user = this.user;
+    if (!user?._id) return;
 
-    if (confirm('Are you sure you want to remove your profile picture?')) {
-      const formData = new FormData();
-      formData.append('profileImage', '');
-      this.userService.updateUser(this.user._id, formData).subscribe({
-        next: (updated) => {
-          this.user = {
-            ...updated,
-            profileImage: '/profile-icon.svg'
-          };
-          this.previewImage = null;
-          this.selectedFile = null;
-        },
-        error: (err) => {
-          console.error(err);
-          this.errorMessage = 'Error removing profile image.';
-        }
-      });
-    }
+    if (!confirm('Are you sure you want to remove your profile picture?')) return;
+
+    const formData = new FormData();
+    formData.append('profileImage', '');
+
+    this.userService.updateUser(user._id, formData).subscribe({
+      next: (updated) => {
+        this.user = {
+          ...user,
+          ...updated,
+          profileImage: '/profile-icon.svg'
+        };
+
+        this.previewImage = null;
+        this.selectedFile = null;
+        this.editing = false;
+        this.updatedUser = {};
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Error removing profile image.';
+      }
+    });
   }
 }

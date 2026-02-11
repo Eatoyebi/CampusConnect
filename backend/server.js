@@ -6,8 +6,10 @@ import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import mongoose from "mongoose";
-import { connectDB } from "./src/config/db.js"; 
-import ticketsRouter from "./src/routes/maintenanceTickets.js"; // maintenance routes
+
+
+import { connectDB } from "./src/config/db.js";
+import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 
 // Load environment variables
@@ -47,21 +49,17 @@ app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
-// Create HTTP server
 // Create HTTP server + Socket.IO
 const server = createServer(app);
 
 // Socket.IO setup
 const io = new SocketIOServer(server, {
   cors: {
-    origin: [
-      process.env.FRONTEND_ORIGIN || "http://localhost:4200",
-    ],
-    methods: ["GET", "POST"]
-  }
+    origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
+    methods: ["GET", "POST"],
+  },
 });
 
-// Real-time chat events
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
@@ -72,7 +70,6 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     io.to(data.room).emit("receive_message", data);
-    console.log(`${data.author} @ ${data.room}: ${data.message}`);
   });
 
   socket.on("disconnect", () => {
@@ -80,7 +77,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start Server (HTTP + WebSocket)
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
