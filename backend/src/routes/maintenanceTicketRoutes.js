@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { createMaintenanceTicket, getAllMaintenanceTickets, updateTicketStatus } from '../controllers/maintenanceTicketController.js';
+import { createMaintenanceTicket, getallMaintenanceTickets, updateTicketStatus } from '../controllers/maintenanceTicketController.js';
 
 const router = express.Router();
 

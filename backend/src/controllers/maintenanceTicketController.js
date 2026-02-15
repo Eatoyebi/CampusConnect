@@ -20,7 +20,7 @@ export const createMaintenanceTicket = async (req, res) => {
     }
 };
 
-export const getAllMaintenanceTickets = async (req, res) => {
+export const getallMaintenanceTickets = async (req, res) => {
     try {
         const filter = {}; // Initialize an empty filter object
         if (req.query.status ) filter.status = req.query.status;

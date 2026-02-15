@@ -5,6 +5,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
+import mongoose from "mongoose";
+
 
 import { connectDB } from "./src/config/db.js";
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
@@ -16,20 +18,21 @@ import ChatMessage from "./src/models/ChatMessage.js";
 
 dotenv.config();
 
+// Fix __dirname in ES modules
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(_filename);
 
+app.use('/uploads',express.static('uploads'));
+
+// Create Express app
 const app = express();
 const PORT = process.env.BACKEND_PORT || 5050;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-
-// serve static uploads from backend/uploads
-app.use("/uploads", express.static(path.join(_dirname, "uploads")));
-
+app.use("/uploads", express.static(path.join(_dirname, "../uploads"))); // serve static uploads
 app.use("/api/users", userRoutes);
-app.use("/api/maintenance-tickets", ticketsRouter);
 
 
 app.use("/api/chat", chatRoutes);
@@ -41,12 +44,19 @@ connectDB(process.env.MONGO_URL)
     process.exit(1);
   });
 
+// Mount routes
+app.use("/api/maintenance-tickets", ticketsRouter);
+app.use("/api/users", express.static(path.join(_dirname, "src/routes/userRoutes.js"))); // user routes
+
+// Base test route
 app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
+// Create HTTP server + Socket.IO
 const server = createServer(app);
 
+// Socket.IO setup
 const io = new SocketIOServer(server, {
   cors: {
     origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
