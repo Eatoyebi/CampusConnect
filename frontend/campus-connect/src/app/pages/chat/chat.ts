@@ -18,20 +18,29 @@ export class ChatComponent implements AfterViewChecked {
   message = '';
   messages: ChatMsg[] = [];
 
-  ownId: string | null = null; // my socket id
+  ownId: string | null = null;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef<HTMLDivElement>;
   private stickToBottom = true;
 
   constructor() {
-    // Subscribe to my socket id
     this.chat.getMyId().subscribe(id => this.ownId = id);
 
-    // Join the room
+    // load history when joining/reconnecting
+    this.chat.onHistory().subscribe((history) => {
+      this.messages = history.map(m => ({
+        ...m,
+        time: m.time ?? (m.createdAt ? new Date(m.createdAt).toLocaleTimeString() : '')
+      }));
+      this.queueScroll();
+    });
+
     this.chat.joinRoom(this.room);
 
-    // Listen for messages from server
     this.chat.onMessage().subscribe((m) => {
-      this.messages.push(m);
+      this.messages.push({
+        ...m,
+        time: m.time ?? (m.createdAt ? new Date(m.createdAt).toLocaleTimeString() : m.time)
+      });
       this.queueScroll();
     });
   }
@@ -43,7 +52,6 @@ export class ChatComponent implements AfterViewChecked {
     }
   }
 
-  // Send to server only — no local push
   send() {
     const text = this.message.trim();
     if (!text || !this.ownId) return;
@@ -57,7 +65,7 @@ export class ChatComponent implements AfterViewChecked {
     };
 
     this.chat.sendMessage(payload);
-    this.message = ''; // clear input
+    this.message = '';
   }
 
   isMine(m: ChatMsg) { return !!this.ownId && m.authorId === this.ownId; }
