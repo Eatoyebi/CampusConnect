@@ -86,43 +86,49 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    try {
-        const allowedFields = [
-            'name',
-            'email',
-            'major',
-            'graduationYear',
-            'department',
-            'jobTitle',
-            'phoneNumber',
-            'profileImageURL',
-            'bio'
-        ];
+  try {
+    const { name, email, bio, major, graduationYear } = req.body;
 
-        const updates = {};
-        if (req.file) {
-            updates.profileImageURL = req.file.filename;
-        }
-        for(const key of allowedFields) {
-            if (req.body[key] !== undefined) {
-                updates[key] = req.body[key];
-            }
-        }
-        const user = await User.findByIDAndUpdate(
-            req.params.id,
-            { $set: updates },
-            { new: true,
-                runValidators: true
-            }
-        );
-        if(!user) {
-            return res.status(404).json({message: 'User not found'});
-        }
-        res.json({message: 'User updated successfully', user});
-    } catch (error) {
-        res.status(500).json({message: 'Internal server error while updating user'});
+    const updates = {};
+
+    if (name !== undefined) updates.name = name;
+    if (email !== undefined) updates.email = email;
+    if (bio !== undefined) updates.bio = bio;
+    if (major !== undefined) updates.major = major;
+    if (graduationYear !== undefined) updates.graduationYear = graduationYear;
+
+    if (req.file) {
+      updates.profileImage = req.file.filename;
+    } 
+    else if (req.body.profileImage === "") {
+      updates.profileImage = null;
     }
-}
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      updates,
+      { new: true }
+    );
+
+    if (!updatedUser)
+      return res.status(404).json({ message: "User not found" });
+
+    res.json(attachProfileImageUrl(req, updatedUser));
+
+  } catch (error) {
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "Email already in use",
+      });
+    }
+
+    res.status(500).json({
+      message: "Error updating user profile",
+      error: error.message,
+    });
+  }
+};
 
 export const deleteUser = async (req, res) => {
     try {
@@ -142,3 +148,21 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({message: 'Internal server error while deleting user'});
     }
 }
+
+export const searchUsers = async (req, res) => {
+  const q = (req.query.q || "").trim();
+
+  const filter = q
+    ? {
+        $or: [
+          { email: new RegExp(q, "i") },
+          { name: new RegExp(q, "i") },
+          { major: new RegExp(q, "i") }
+        ]
+      }
+    : {};
+
+  const users = await User.find(filter).limit(25);
+
+  res.json(users);
+};
