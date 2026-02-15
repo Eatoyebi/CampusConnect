@@ -3,17 +3,21 @@ import { io, Socket } from 'socket.io-client';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 export type ChatMsg = {
+  _id?: string;          // Mongo id
   room: string;
   author: string;
-  authorId: string;
+  authorId?: string;     
   message: string;
-  time: string;
+  time?: string;         
+  createdAt?: string;    // Mongo timestamp
 };
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   private socket!: Socket;
+
   private myId$ = new BehaviorSubject<string | null>(null);
+  private history$ = new BehaviorSubject<ChatMsg[]>([]);
 
   constructor() {
     this.socket = io('http://localhost:5050', { transports: ['websocket'] });
@@ -26,10 +30,24 @@ export class ChatService {
     this.socket.on('disconnect', () => {
       this.myId$.next(null);
     });
+
+    //receive chat history on join
+    this.socket.on('chat_history', (history: ChatMsg[]) => {
+      this.history$.next(history);
+    });
+
+    // server-side errors
+    this.socket.on('chat_error', (err: any) => {
+      console.error('[SOCKET] chat_error', err);
+    });
   }
 
   getMyId(): Observable<string | null> {
     return this.myId$.asObservable();
+  }
+
+  onHistory(): Observable<ChatMsg[]> {
+    return this.history$.asObservable();
   }
 
   joinRoom(room: string) {
@@ -45,7 +63,7 @@ export class ChatService {
     return new Observable(observer => {
       const handler = (data: ChatMsg) => observer.next(data);
       this.socket.on('receive_message', handler);
-      // Teardown logic: remove the handler when unsubscribed
+
       return () => {
         this.socket.off('receive_message', handler);
       };

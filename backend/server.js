@@ -12,7 +12,10 @@ import { connectDB } from "./src/config/db.js";
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 
-// Load environment variables
+
+import chatRoutes from "./src/routes/chatRoutes.js";
+import ChatMessage from "./src/models/ChatMessage.js";
+
 dotenv.config();
 
 // Fix __dirname in ES modules
@@ -32,8 +35,9 @@ app.use("/uploads", express.static(path.join(_dirname, "../uploads"))); // serve
 app.use("/api/users", userRoutes);
 
 
-// Connect to MongoDB
-connectDB(process.env.MONGO_URI)
+app.use("/api/chat", chatRoutes);
+
+connectDB(process.env.MONGO_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
     console.error("MongoDB connection error:", err);
@@ -63,13 +67,46 @@ const io = new SocketIOServer(server, {
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
-  socket.on("join_room", (room) => {
+
+  socket.on("join_room", async (room) => {
     socket.join(room);
     console.log(`${socket.id} joined room: ${room}`);
+
+    try {
+      const history = await ChatMessage.find({ room })
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .lean();
+
+      socket.emit("chat_history", history.reverse());
+    } catch (err) {
+      console.error("Error loading chat history:", err);
+      socket.emit("chat_error", { message: "Failed to load chat history." });
+    }
   });
 
-  socket.on("send_message", (data) => {
-    io.to(data.room).emit("receive_message", data);
+
+  socket.on("send_message", async (data) => {
+    try {
+      const room = data?.room;
+      const author = data?.author;
+      const message = data?.message;
+
+      if (!room || !author || !message || !message.trim()) return;
+
+      const saved = await ChatMessage.create({
+        room,
+        author,
+        authorId: data?.authorId || "",
+        message: message.trim(),
+        time: data?.time || "",
+      });
+
+      io.to(room).emit("receive_message", saved);
+    } catch (err) {
+      console.error("Error saving chat message:", err);
+      socket.emit("chat_error", { message: "Failed to send message." });
+    }
   });
 
   socket.on("disconnect", () => {
