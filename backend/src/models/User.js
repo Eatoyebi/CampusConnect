@@ -15,6 +15,20 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
+    studentProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "StudentProfile",
+    },
+
+    maintenanceProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "MaintenanceProfile",
+  },
+
+    staffProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "StaffProfile",
+  },
     major: { type: String },
     graduationYear: { type: String },
     bio: { type: String },
