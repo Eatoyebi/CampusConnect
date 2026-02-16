@@ -24,7 +24,7 @@ router.post(
 
 // GET /api/maintenance-tickets
 
-router.get('/', getAllMaintenanceTickets);
+router.get('/', getallMaintenanceTickets);
 
 // PATCH /api/maintenance-tickets/:id/status
 router.patch('/:id/status', [

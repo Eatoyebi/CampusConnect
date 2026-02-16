@@ -5,38 +5,43 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
-import mongoose from "mongoose";
-
 
 import { connectDB } from "./src/config/db.js";
+
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
-
-
 import chatRoutes from "./src/routes/chatRoutes.js";
+
 import ChatMessage from "./src/models/ChatMessage.js";
 
 dotenv.config();
 
 // Fix __dirname in ES modules
-const _filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use('/uploads',express.static('uploads'));
-
-// Create Express app
+// Create Express app FIRST (before app.use)
 const app = express();
 const PORT = process.env.BACKEND_PORT || 5050;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static(path.join(_dirname, "../uploads"))); // serve static uploads
+
+// Serve uploads statically
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Mount routes (correct)
 app.use("/api/users", userRoutes);
-
-
+app.use("/api/maintenance-tickets", ticketsRouter);
 app.use("/api/chat", chatRoutes);
 
+// Base test route
+app.get("/", (req, res) => {
+  res.send("Campus Connect API is running...");
+});
+
+// Connect DB ONCE
 connectDB(process.env.MONGO_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
@@ -44,19 +49,9 @@ connectDB(process.env.MONGO_URL)
     process.exit(1);
   });
 
-// Mount routes
-app.use("/api/maintenance-tickets", ticketsRouter);
-app.use("/api/users", express.static(path.join(_dirname, "src/routes/userRoutes.js"))); // user routes
-
-// Base test route
-app.get("/", (req, res) => {
-  res.send("Campus Connect API is running...");
-});
-
 // Create HTTP server + Socket.IO
 const server = createServer(app);
 
-// Socket.IO setup
 const io = new SocketIOServer(server, {
   cors: {
     origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
@@ -64,9 +59,9 @@ const io = new SocketIOServer(server, {
   },
 });
 
+// Real-time chat events
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
-
 
   socket.on("join_room", async (room) => {
     socket.join(room);
@@ -84,7 +79,6 @@ io.on("connection", (socket) => {
       socket.emit("chat_error", { message: "Failed to load chat history." });
     }
   });
-
 
   socket.on("send_message", async (data) => {
     try {
