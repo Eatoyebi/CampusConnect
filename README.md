@@ -16,15 +16,23 @@ The following tools must be installed before running the project:
 • Git  
 
 ## Environment Configuration
-This project uses environment variables for configuration. Create a `.env` file inside the `backend` directory. This file is **not** committed to version control and should remain local.
+This project uses environment variables for configuration. 
 
-Required environment variables include:
-• Server port  
-• MongoDB connection string  
-• Client URL  
-• Authentication secrets  
+### Backend Environment Setup
+1. Navigate to the `backend` directory
+2. Copy the `.env.example` file to `.env`:
+   ```bash
+   cd backend
+   cp .env.example .env
+   ```
+3. Edit the `.env` file and replace the placeholder values with your actual configuration:
+   - `MONGO_URL`: Replace `<MONGODB_PASSWORD>` with your actual MongoDB password
+   - Other variables can be adjusted as needed for your environment
 
-Ensure `.env` is listed in `.gitignore`. Frontend configuration values are managed through Angular environment files located at:
+**Important:** The `.env` file contains sensitive information and is **never** committed to version control. It's listed in `.gitignore` to prevent accidental commits.
+
+### Frontend Configuration
+Frontend configuration values are managed through Angular environment files located at:
 `frontend/campus-connect/src/environments/`
 
 ## Install Dependencies
