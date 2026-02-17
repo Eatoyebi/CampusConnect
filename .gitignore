@@ -28,6 +28,10 @@ src/**/*.js.map
 *.code-workspace
 
 # Environment
+backend/.env
+backend/.env.local
+backend/.env.development
+backend/.env.production
 .env
 .env.local
 .env.development
