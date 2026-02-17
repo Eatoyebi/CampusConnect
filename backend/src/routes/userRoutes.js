@@ -20,6 +20,10 @@ import {
 
 const router = express.Router();
 
+//auth
+router.post('/register', createUser);
+router.post('/login', loginUser);
+
 // Me
 router.get("/me", requireAuth, getMe);
 router.put("/me", requireAuth, upload.single("profileImage"), validateUserUpdate, updateMe);

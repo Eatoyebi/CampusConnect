@@ -3,53 +3,7 @@ import StudentProfile from '../models/StudentUser.js';
 import MaintenanceUser from '../models/MaintenanceUserModel.js';
 import StaffUserModel from '../models/StaffUser.js';
 
-export const createUser = async (req, res) => {
 
-try {
-    //create base user
-    const { name, email, password, role, mNumber, major, graduationYear, department, jobTitle, phoneNumber } = req.body;
-
-    const profileImage = req.file ? req.file.filename : null;
-
-    const allowedRoles = ['student', 'maintenance', 'staff'];
-
-    if (!allowedRoles.includes(role)) {
-        return res.status(400).json({ message: 'Invalid role' });
-    }
-
-    const user = await User.create({ name, email, role, password });
-
-    if (role === 'student') {
-        await StudentProfile.create({
-            user: user._id,
-            mNumber,
-            major,
-            graduationYear,
-    });
-}
-
-    else if (role === 'maintenance') {
-        await MaintenanceUser.create({
-            user: user._id,
-            tickets: []
-        });
-    }
-    else if (role === 'staff') {
-        await StaffUserModel.create({
-            user: user._id,
-            department,
-            jobTitle,
-            email,
-            phoneNumber
-        });
-    }
-    return res.status(201).json({messag: 'User created succesfully', userId: user._id});
-}
-    catch (error) {
-        console.error('Error creating user:', error);
-        return res.status(500).json({message: 'Interal server error while creating user'});
-    }
-};
  
 export const getUserById = async (req, res) => {
     try {
@@ -166,3 +120,4 @@ export const searchUsers = async (req, res) => {
 
   res.json(users);
 };
+
