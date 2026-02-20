@@ -6,10 +6,18 @@ export type ChatMsg = {
   _id?: string;          // Mongo id
   room: string;
   author: string;
-  authorId?: string;     
+  authorId?: string;     // socket id
   message: string;
-  time?: string;         
-  createdAt?: string;    // Mongo timestamp
+  time?: string;
+  createdAt?: string;
+
+  // moderation (✅ single flag)
+  isDeleted?: boolean;
+  deletedAt?: string;
+  deletedBy?: string;
+
+  // UI-only helper
+  _menuOpen?: boolean;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -19,11 +27,12 @@ export class ChatService {
   private myId$ = new BehaviorSubject<string | null>(null);
   private history$ = new BehaviorSubject<ChatMsg[]>([]);
 
+  private apiBase = 'http://localhost:5050';
+
   constructor() {
     this.socket = io('http://localhost:5050', { transports: ['websocket'] });
 
     this.socket.on('connect', () => {
-      console.log('[SOCKET] connected', this.socket.id);
       this.myId$.next(this.socket.id ?? null);
     });
 
@@ -31,12 +40,10 @@ export class ChatService {
       this.myId$.next(null);
     });
 
-    //receive chat history on join
     this.socket.on('chat_history', (history: ChatMsg[]) => {
-      this.history$.next(history);
+      this.history$.next(history || []);
     });
 
-    // server-side errors
     this.socket.on('chat_error', (err: any) => {
       console.error('[SOCKET] chat_error', err);
     });
@@ -63,10 +70,66 @@ export class ChatService {
     return new Observable(observer => {
       const handler = (data: ChatMsg) => observer.next(data);
       this.socket.on('receive_message', handler);
-
-      return () => {
-        this.socket.off('receive_message', handler);
-      };
+      return () => this.socket.off('receive_message', handler);
     });
+  }
+
+  // broadcast from backend: io.to(room).emit("message_deleted", { messageId })
+  onMessageDeleted(): Observable<{ messageId: string }> {
+    return new Observable(observer => {
+      const handler = (data: { messageId: string }) => observer.next(data);
+      this.socket.on('message_deleted', handler);
+      return () => this.socket.off('message_deleted', handler);
+    });
+  }
+
+  // ===== Moderation HTTP APIs =====
+
+  private getAuthHeader(): Record<string, string> {
+    const token =
+      localStorage.getItem('token') ||
+      localStorage.getItem('access_token') ||
+      localStorage.getItem('authToken') ||
+      '';
+
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+
+  async deleteMessage(messageId: string, reason = ''): Promise<void> {
+    const url = `${this.apiBase}/api/chat/messages/${messageId}?reason=${encodeURIComponent(reason)}`;
+
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        ...this.getAuthHeader(),
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Delete failed (${res.status})`);
+    }
+  }
+
+  async flagUser(payload: {
+    room: string;
+    targetUserId?: string;
+    targetAuthor?: string;
+    messageId?: string;
+    reason?: string;
+  }): Promise<void> {
+    const url = `${this.apiBase}/api/chat/flags`;
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.getAuthHeader(),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Flag failed (${res.status})`);
+    }
   }
 }

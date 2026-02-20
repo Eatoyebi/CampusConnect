@@ -59,6 +59,8 @@ const io = new SocketIOServer(server, {
   },
 });
 
+app.set("io", io);
+
 // Real-time chat events
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
@@ -103,10 +105,28 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("moderation_delete_message", async ({ messageId }) => {
+  try {
+    if (!messageId) return;
+
+    const msg = await ChatMessage.findById(messageId);
+    if (!msg) return;
+
+    msg.isDeleted = true;
+    msg.deletedAt = new Date();
+    await msg.save();
+
+    io.to(msg.room).emit("message_deleted", { messageId });
+  } catch (err) {
+    console.error("moderation_delete_message error:", err);
+  }
+});
+  
   socket.on("disconnect", () => {
     console.log(`Socket disconnected: ${socket.id}`);
   });
 });
+
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

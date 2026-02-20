@@ -1,27 +1,114 @@
-<header class="chat-header">
-    <span class="claw" aria-hidden="true"></span>
-    <span>Floor 3</span>
-</header>
+<div class="chat-shell">
 
-<div #scrollContainer class="chat-stream" (scroll)="onScroll()">
-  <div *ngFor="let msg of messages; trackBy: trackByIdx"
-       class="row"
-       [class.mine]="isMine(msg)">
-    <div class="bubble">
-      <div class="meta">
-        <span class="author">{{ isMine(msg) ? 'You' : msg.author }}</span>
-        <span class="time">{{ msg.time }}</span>
-      </div>
-      <div class="text">{{ msg.message }}</div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Channels</div>
+      <div class="sidebar-subtitle">Select a room</div>
     </div>
-  </div>
-</div>
 
-<form class="composer" (submit)="$event.preventDefault(); send()">
-  <input id="chat-input"
-         [(ngModel)]="message"
-         name="message"
-         placeholder="Type a message…"
-         autocomplete="off"/>
-  <button type="submit" class="send-btn">Send</button>
-</form>
+    <div class="room-list">
+      <button
+        class="room"
+        *ngFor="let r of rooms"
+        [class.active]="activeRoom && r.id === activeRoom.id"
+        (click)="switchRoom(r)">
+        <span class="room-dot" [class.ra]="r.type === 'ra'"></span>
+        <span class="room-label">{{ r.label }}</span>
+        <span class="room-badge" *ngIf="r.type === 'ra'">RA</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="hint">
+        <div class="hint-title">Tip</div>
+        <div class="hint-body">Shift + Enter for a new line.</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Chat Panel -->
+  <section class="chat-panel">
+
+    <header class="chat-header">
+      <div class="header-left">
+        <div class="chat-title">{{ activeRoom?.label }}</div>
+        <div class="chat-subtitle">Room ID: {{ activeRoom?.id }}</div>
+      </div>
+
+      <div class="header-right">
+        <span class="pill" *ngIf="ownId; else offline">Connected</span>
+        <ng-template #offline>
+          <span class="pill pill-offline">Offline</span>
+        </ng-template>
+      </div>
+    </header>
+
+    <div class="messages" #scrollContainer (scroll)="onScroll()">
+
+      <div *ngIf="loadingHistory" class="state">
+        Loading messages…
+      </div>
+
+      <div *ngIf="!loadingHistory && messages.length === 0" class="state">
+        No messages yet. Say hi
+      </div>
+
+      <div
+        class="msg"
+        *ngFor="let m of messages; let i = index; trackBy: trackById"
+        [class.mine]="isMine(m)">
+
+        <!-- ✅ bubble uses isDeleted consistently -->
+        <div class="bubble" [class.removed]="m.isDeleted">
+
+          <!-- Header for non-mine + grouping -->
+          <div class="meta" *ngIf="!isMine(m) && isFirstOfGroup(i)">
+            <span class="author">{{ m.author }}</span>
+            <span class="time">{{ m.time }}</span>
+
+            <!-- ✅ moderator menu only if message not deleted -->
+            <div class="mod-wrap" *ngIf="isModerator() && !m.isDeleted">
+              <button class="mod-btn" (click)="toggleActions(m)" title="Moderation actions">
+                ⋯
+              </button>
+
+              <div class="mod-menu" *ngIf="actionOpenForId === m._id">
+                <button class="mod-item" (click)="removeMessage(m)">Remove</button>
+                <button class="mod-item" (click)="flagMessage(m)">Flag</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ render deleted placeholder -->
+          <div class="text" [class.deleted]="m.isDeleted">
+            {{ m.isDeleted ? '[Message removed by RA]' : m.message }}
+          </div>
+
+          <!-- Mine timestamp -->
+          <div class="time mine-time" *ngIf="isMine(m)">
+            {{ m.time }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="composer">
+      <textarea
+        [(ngModel)]="message"
+        placeholder="Type a message…"
+        (keydown.enter)="onEnter($event)"
+        aria-label="Message input"></textarea>
+
+      <button
+        class="send"
+        (click)="send()"
+        [disabled]="!message.trim() || !ownId">
+        Send
+      </button>
+    </footer>
+
+  </section>
+
+</div>
