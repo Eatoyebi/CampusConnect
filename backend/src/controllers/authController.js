@@ -25,7 +25,7 @@ try {
             user: user._id,
             mNumber,
             major,
-            graduationYear,
+            graduationYear, //add password fields?
     });
 }
 
