@@ -120,4 +120,3 @@ export const searchUsers = async (req, res) => {
 
   res.json(users);
 };
-
