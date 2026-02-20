@@ -5,14 +5,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
-
 import { connectDB } from "./src/config/db.js";
-
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
-
 import ChatMessage from "./src/models/ChatMessage.js";
+import aiRoutes from "./src/routes/aiRoutes.js";
 
 dotenv.config();
 
@@ -28,13 +26,13 @@ const PORT = process.env.BACKEND_PORT || 5050;
 app.use(cors());
 app.use(express.json());
 
-// Serve uploads statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Mount routes (correct)
+// Mount routes
 app.use("/api/users", userRoutes);
 app.use("/api/maintenance-tickets", ticketsRouter);
 app.use("/api/chat", chatRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Base test route
 app.get("/", (req, res) => {
