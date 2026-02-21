@@ -1,0 +1,67 @@
+<div class="ticket-list-container">
+
+<h2> Current Maintenance Tickets</h2>
+
+<div class="form-filter">
+    <input 
+    class="form-control"
+    placeholder="Search description..."
+    [(ngModel)]="searchText"
+     />
+
+     <label for="statusFilterSelect">Filter by Status:</label>
+     <select id="statusFilterSelect" class="form-slect" [(ngModel)]="statusFilter">
+        <option value="">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Assigned">Assigned</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+     </select>
+</div>
+
+<table class="ticket-table">
+    <thead class="">
+        <tr>
+            <th>Ticket Id #</th>
+            <th>Location</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+<tbody>
+    <tr *ngFor=" let t of filteredTickets()">
+        <td>{{ t._id.slice(-5) }}</td>
+        <td>{{ t.location }}</td>
+        <td>{{ t.priority }}</td>
+        <td>{{ t.status }}</td>
+        <td>{{ t.assignedTo }}</td>
+        <td>{{ t.date }}</td>
+
+
+        <td>
+          {{ t.assignedTo?.name || 'Unassigned' }}
+        </td>
+
+        <td>
+          {{ t.createdAt}}
+        </td>
+
+        <td>
+          <a
+            class="btn btn-sm btn-outline-primary"
+            [routerLink]="['/tickets', t._id]">
+            View
+          </a>
+        </td>
+    </tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+

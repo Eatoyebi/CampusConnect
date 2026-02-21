@@ -1,39 +1,81 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const UserSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+{
 
-    // auth (optional for now, but future proof)
-    password: { type: String },
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
 
-    role: {
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
+
+  password: {
+    type: String,
+    required: true
+  },
+
+  role: {
+    type: String,
+    enum: ["student", "ra", "maintenance", "admin"],
+    default: "student",
+    required: true
+  },
+
+  studentInfo: {
+    mNumber: {
       type: String,
-      enum: ["student", "ra", "admin", "maintenance"],
-      default: "student",
-      required: true,
+      match: /^M\d{8}$/ // M########
     },
 
-    major: { type: String },
-    graduationYear: { type: String },
-    bio: { type: String },
-    profileImage: { type: String },
+    major: String,
+    graduationYear: String,
 
     housing: {
-      building: { type: String },
-      roomNumber: { type: String },
-      raId: { type: String },
-    },
+      building: String,
+      roomNumber: String,
 
-    raAssignment: {
-      building: { type: String },
-      floor: { type: String },
-    },
+      ra: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    }
   },
-  { timestamps: true }
-);
 
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
+  raInfo: {
+    building: String,
+    floor: String
+  },
 
-export default User;
+  maintenanceInfo: {
+    department: String,
+    jobTitle: String,
+    phoneNumber: String
+  },
+
+  bio: {
+    type: String,
+    maxlength: 500
+  },
+
+  profileImage: String
+},
+{
+  timestamps: true
+}
+
+UserSchema.pre("save", async function(next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+export default mongoose.model("User", UserSchema);
