@@ -16,8 +16,8 @@ router.post("/profile", async (req, res) => {
         return res.status(400).json({ message: "Valid userId is required." });
       }
   
-      if (!/^\d{8}$/.test(String(mNumber || ""))) {
-        return res.status(400).json({ message: "mNumber must be 8 digits." });
+      if (!/^M?\d{8}$/.test(String(mNumber || "").trim())) {
+        return res.status(400).json({ message: "mNumber must be 8 digits, optionally prefixed with 'M'." });
       }
   
       const user = await User.findById(userId).lean();
