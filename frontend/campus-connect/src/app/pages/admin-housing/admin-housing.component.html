@@ -23,7 +23,7 @@
                   (mousedown)="selectStudent(s)"
                 >
                   <div class="name">{{ s.name }}</div>
-                  <div class="meta">{{ s.email }} <span *ngIf="s.major">• {{ s.major }}</span></div>
+                  <div class="meta">{{ s.email }} <span *ngIf="s.studentProfile?.major">• {{ s.studentProfile?.major }}</span></div>
                 </button>
               </div>
             </div>
