@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TicketService } from '../../../shared/services/ticket.service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -15,12 +16,14 @@ tickets: any[] = [];
 searchText = '';
 statusFilter = '';
 
+constructor(private ticketService: TicketService) {}
+
 ngOnInit() {
   this.loadTickets();
 }
 
 loadTickets() {
-  this.ticketService.getTickets().subscribe(data => {
+  this.ticketService.getAllTickets().subscribe((data: any[]) => {
     this.tickets = data;
   });
 }

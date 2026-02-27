@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Ticket } from '../../models/ticket.model';
 
 @Injectable({
     providedIn: 'root'
@@ -16,37 +17,37 @@ export class TicketService {
     }
 
     // read ticket functions
-    getAll(): Observable<any[]> {
-        return this.http.get<any[]>(this.baseUrl);
+    getAllTickets(): Observable<Ticket[]> {
+        return this.http.get<Ticket[]>(this.baseUrl);
     }
 
-    getMyTickets(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/my-tickets`);
+    getMyTickets(): Observable<Ticket[]> {
+        return this.http.get<Ticket[]>(`${this.baseUrl}/my-tickets`);
     }
 
-    getAssignedTickets(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/assigned-tickets`);
+    getAssignedTickets(): Observable<Ticket[]> {
+        return this.http.get<Ticket[]>(`${this.baseUrl}/assigned-tickets`);
     }
 
-    getUnassignedTickets(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/unassigned-tickets`);
+    getUnassignedTickets(): Observable<Ticket[]> {
+        return this.http.get<Ticket[]>(`${this.baseUrl}/unassigned-tickets`);
     }
 
-    getAllResidentTickets(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/residents`);
+    getAllResidentTickets(): Observable<Ticket[]> {
+        return this.http.get<Ticket[]>(`${this.baseUrl}/residents`);
     }
 
-    getTicketById(id: string): Observable<any> {
-        return this.http.get(`${this.baseUrl}/${id}`);
+    getTicketById(id: string): Observable<Ticket> {
+        return this.http.get<Ticket>(`${this.baseUrl}/${id}`);
     }
 
     // update ticket functions
     assignTicket(ticketId: string): Observable<any> {
-        return this.http.put(`${this.baseUrl}/${ticketId}/assign`, {})
+        return this.http.patch(`${this.baseUrl}/${ticketId}/assign`, {})
     }
 
     updateTicketStatus(ticketId: string, status: string): Observable<any> {
-        return this.http.put(`${this.baseUrl}/${ticketId}/status`, { status });
+        return this.http.patch(`${this.baseUrl}/${ticketId}/status`, { status });
     }
 
     addNote(ticketId: string, text: string): Observable<any> {
