@@ -10,11 +10,23 @@ export interface User {
   graduationYear?: string | number;
   bio?: string;
   profileImage?: string;
+  
 
   role?: 'student' | 'ra' | 'admin';
   raAssignment?: {
     building?: string;
     floor?: string;
+  };
+  studentProfile?: {
+    major?: string;
+    graduationYear?: string | number;
+    bio?: string;
+    roomId?: string;
+    housing?: {
+      building?: string;
+      roomNumber?: string;
+      ra?: string;
+    };
   };
 }
 
@@ -45,4 +57,11 @@ export class UserService {
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/me`);
   }
+
+  searchUsers(q: string) {
+    return this.http.get<User[]>(`${this.apiUrl}/search`, {
+      params: { q }
+    });
+  }
+
 }

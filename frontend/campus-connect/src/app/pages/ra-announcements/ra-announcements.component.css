@@ -146,4 +146,145 @@
     background: #e20d2b;
     color: #fff;
   }
-  
+  /* Divider */
+.divider {
+  margin: 18px auto;
+  max-width: 800px;
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Recent header */
+.recent-header {
+  max-width: 800px;
+  margin: 10px auto 14px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.recent-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.recent-count {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Empty state */
+.empty-state {
+  max-width: 800px;
+  margin: 0 auto 18px;
+  padding: 14px 1rem;
+}
+
+.empty-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.empty-sub {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Grid layout */
+.announcement-grid {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+/* Card */
+.announcement-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 12px 12px 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.announcement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Pill + date */
+.pill {
+  background: rgba(226, 13, 43, 0.12);
+  color: #e20d2b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+.date {
+  color: #777;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* Title + body */
+.card-title {
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.card-body {
+  margin: 0;
+  font-size: 0.98rem;
+  color: #222;
+  line-height: 1.35;
+  white-space: pre-wrap;
+}
+
+/* Delete icon button */
+.icon-btn {
+  border: 1px solid rgba(226, 13, 43, 0.25);
+  background: #fff;
+  color: #e20d2b;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 150ms ease;
+}
+
+.icon-btn:hover {
+  background: rgba(226, 13, 43, 0.08);
+}
+
+.icon-btn.danger {
+  border-color: rgba(226, 13, 43, 0.4);
+}

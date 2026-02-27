@@ -176,3 +176,32 @@
     transform: translateY(0);
   }
 }
+.legal-links {
+  position: fixed;
+  bottom: 10px;   /* keep at bottom */
+  left: 18px;     /* move to left side */
+  right: auto;  
+  font-size: 0.95rem;
+  color: #666;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(6px);
+}
+
+.legal-links a {
+  color: #e20d2b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.legal-links a:hover {
+  text-decoration: underline;
+}
+
+.legal-links .sep {
+  margin: 0 8px;
+  color: #888;
+}

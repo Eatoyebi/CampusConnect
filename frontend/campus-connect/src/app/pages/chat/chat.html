@@ -92,6 +92,19 @@
         </div>
       </div>
 
+<form class="composer" (submit)="$event.preventDefault(); send()">
+  <input id="chat-input"
+         [(ngModel)]="message"
+         name="message"
+         placeholder="Type a message…"
+         autocomplete="off"/>
+  <button type="submit" class="send-btn">Send</button>
+</form>
+
+<div class="chat-footer">
+  <a routerLink="/acceptable-use">Acceptable Use Policy</a>
+</div>
+
     </div>
 
     <footer class="composer">

@@ -37,6 +37,7 @@ router.get("/admin/users", requireAuth, requireAdmin, searchUsers);
 // CRUD
 router.post("/", upload.single("profileImage"), validateUserInput, createUser);
 router.get("/", getAllUsers);
+router.get("/search", requireAuth, searchUsers);
 router.get("/:id", getUserById);
 router.put("/:id", upload.single("profileImage"), validateUserUpdate, updateUser);
 router.delete("/:id", deleteUser);

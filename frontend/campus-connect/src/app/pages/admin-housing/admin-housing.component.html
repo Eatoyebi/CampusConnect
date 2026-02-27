@@ -1,0 +1,75 @@
+<div class="page">
+    <h2>Admin Housing</h2>
+  
+    <div class="grid">
+        <section class="card">
+            <h3>1. Find Student</h3>
+          
+            <div class="autocomplete">
+              <input
+                class="input"
+                [(ngModel)]="search"
+                (input)="searchStudents()"
+                (focus)="showResults = true"
+                (blur)="onSearchBlur()"
+                placeholder="Search name, email, major"
+              />
+          
+              <div class="results" *ngIf="showResults && students.length">
+                <button
+                  type="button"
+                  class="result"
+                  *ngFor="let s of students"
+                  (mousedown)="selectStudent(s)"
+                >
+                  <div class="name">{{ s.name }}</div>
+                  <div class="meta">{{ s.email }} <span *ngIf="s.major">• {{ s.major }}</span></div>
+                </button>
+              </div>
+            </div>
+          
+            <div class="student-card" *ngIf="selectedStudent">
+              <div class="student-title">{{ selectedStudent.name }}</div>
+              <div class="muted">{{ selectedStudent.email }}</div>
+          
+              <div class="row">
+                <div><span class="label">Major</span> {{ selectedStudent?.studentProfile?.major || "N/A" }}</div>
+                <div><span class="label">Grad</span> {{ selectedStudent?.studentProfile?.graduationYear || "N/A" }}</div>
+              </div>
+            </div>
+          </section>
+  
+      <section class="card">
+        <h3>2. Pick a Room</h3>
+  
+        <label class="label">Building</label>
+        <select class="select" [(ngModel)]="selectedBuildingId" (change)="onBuildingChange()">
+          <option value="">Select building</option>
+          <option *ngFor="let b of buildings" [value]="b._id">{{ b.name }}</option>
+        </select>
+  
+        <label class="label">Floor</label>
+        <select
+          class="select"
+          [(ngModel)]="selectedFloorId"
+          (change)="onFloorChange()"
+          [disabled]="!selectedBuildingId"
+        >
+          <option value="">Select floor</option>
+          <option *ngFor="let f of floors" [value]="f._id">{{ f.name || ('Floor ' + f.number) }}</option>
+        </select>
+  
+        <label class="label">Room</label>
+        <select class="select" [(ngModel)]="selectedRoomId" [disabled]="!selectedFloorId">
+          <option value="">Select room</option>
+          <option *ngFor="let r of rooms" [value]="r._id">{{ r.roomNumber }}</option>
+        </select>
+  
+        <button class="btn" (click)="assign()" [disabled]="!selectedStudentId || !selectedRoomId">
+          Assign Room
+        </button>
+  
+        <p class="status" *ngIf="statusMsg">{{ statusMsg }}</p>
+      </section>
+    </div>
+  </div>

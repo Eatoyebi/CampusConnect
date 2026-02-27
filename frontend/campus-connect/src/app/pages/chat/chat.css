@@ -434,3 +434,20 @@ textarea:focus {
 .bubble.removed:hover {
   background: #f3f3f3;
 }
+
+.chat-footer {
+  position: absolute;
+  bottom: 12px;
+  right: 20px;
+  font-size: 13px;
+}
+
+.chat-footer a {
+  color: #b10f1a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.chat-footer a:hover {
+  text-decoration: underline;
+}

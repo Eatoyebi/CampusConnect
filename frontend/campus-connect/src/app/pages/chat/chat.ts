@@ -16,11 +16,12 @@ type Room = {
   label: string;
   type: 'floor' | 'ra';
 };
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })

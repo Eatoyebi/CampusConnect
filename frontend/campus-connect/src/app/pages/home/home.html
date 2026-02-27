@@ -55,7 +55,7 @@
         <div class="announcement-content">
           <h3 class="announcement-title">{{ ann.title }}</h3>
           <p class="announcement-message">
-            {{ ann.message }}
+            {{ ann.body }}
           </p>
           <p class="announcement-meta">
             {{ ann.createdAt | date: 'MMM d, y, h:mm a' }}
@@ -76,4 +76,10 @@
       </p>
     </div>
   </section>
+</div>
+
+<div class="legal-links" aria-label="Legal links">
+  <a routerLink="/privacy-policy">Privacy Policy</a>
+  <span class="sep">|</span>
+  <a routerLink="/accessibility">Accessibility</a>
 </div>
