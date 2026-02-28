@@ -1,34 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AnnouncementsService, Announcement } from '../ra-announcements/announcements.service'; // Adjust path if needed
-import { Observable } from 'rxjs';
+import { AnnouncementsService, Announcement } from '../ra-announcements/announcements.service';
 
-announcements$: Observable<Announcement>;
 @Component({
   selector: 'app-student-announcements',
+  standalone: true,
   templateUrl: './student-announcements.component.html',
   styleUrls: ['./student-announcements.component.css'],
-  standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
 })
-
-export class StudentAnnouncementsComponent {
+export class StudentAnnouncementsComponent implements OnInit {
   categories = ['general', 'floor', 'building'];
   selectedCategory = '';
+
   allAnnouncements: Announcement[] = [];
 
-  constructor(private announcementsService: AnnouncementsService) {
-    this.announcementsService.getAnnouncements().subscribe(
-      (items: Announcement[]) => {
-        this.allAnnouncements = items;
-      },
-      (err) => {
+  constructor(private announcementsService: AnnouncementsService) {}
+
+  ngOnInit(): void {
+    this.announcementsService.getAnnouncements().subscribe({
+      next: (items) => (this.allAnnouncements = items),
+      error: (err) => {
         console.error('Failed to load announcements', err);
         this.allAnnouncements = [];
-      }
-    );
-    
+      },
+    });
   }
 
   get count() {
@@ -39,5 +36,4 @@ export class StudentAnnouncementsComponent {
     if (!this.selectedCategory) return this.allAnnouncements;
     return this.allAnnouncements.filter(a => a.category === this.selectedCategory);
   }
-  
 }

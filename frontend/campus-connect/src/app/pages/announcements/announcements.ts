@@ -34,7 +34,6 @@ export class Announcements {
   }
 
   submit() {
-    console.log("SUBMIT FIRED", this.form.value);
     
     if (this.form.invalid) {
       this.form.markAllAsTouched();

@@ -77,65 +77,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-  /**
- * POST /api/floors/seed/all
- * Body: { universityId: string, min: number, max: number }
- * Creates floors min..max for every building in that university.
- */
-router.post("/seed/all", async (req, res) => {
-    try {
-      const { universityId, min = 1, max = 5 } = req.body;
-  
-      if (!universityId) {
-        return res.status(400).json({ message: "universityId is required." });
-      }
-  
-      const minNum = Number(min);
-      const maxNum = Number(max);
-  
-      if (!Number.isInteger(minNum) || !Number.isInteger(maxNum) || minNum < 0 || maxNum < minNum) {
-        return res.status(400).json({ message: "min/max must be valid integers, and max >= min." });
-      }
-  
-      const buildings = await Building.find({ universityId }).lean();
-      if (!buildings.length) {
-        return res.status(404).json({ message: "No buildings found for that universityId." });
-      }
-  
-      const ops = [];
-      for (const b of buildings) {
-        for (let n = minNum; n <= maxNum; n++) {
-          ops.push({
-            updateOne: {
-              filter: { universityId, buildingId: b._id, number: n },
-              update: {
-                $setOnInsert: {
-                  universityId,
-                  buildingId: b._id,
-                  number: n,
-                  name: `Floor ${n}`,
-                },
-              },
-              upsert: true,
-            },
-          });
-        }
-      }
-  
-      const result = await Floor.bulkWrite(ops);
-      return res.json({
-        message: "Seeded floors for all buildings.",
-        buildings: buildings.length,
-        range: { min: minNum, max: maxNum },
-        result,
-      });
-    } catch (err) {
-      console.error("Seed all floors error:", err);
-      return res.status(500).json({ message: "Failed to seed floors." });
-    }
-  });
-  
-
 /**
  * DELETE /api/floors/:id
  */

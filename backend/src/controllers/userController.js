@@ -48,23 +48,15 @@ export const createUser = async (req, res) => {
     const user = await User.create({ name, email, role, password, profileImage });
 
     if (role === "student") {
-      const profiles = await StudentUser.find({ user: { $in: userIds } }).lean(); ({
+      const studentProfile = await StudentProfile.create({
         user: user._id,
         mNumber: String(mNumber ?? "").trim(),
         major: String(major ?? "").trim(),
-        graduationYear: String(graduationYear ?? "").trim(),
-        bio: String(req.body.bio ?? "").trim(),
-        roomId: null,
-        housing: {
-          building: "",
-          roomNumber: "",
-          ra: null,
-        },
+        graduationYear,
       });
     
       user.studentProfile = studentProfile._id;
       await user.save();
-
     } else if (role === "maintenance") {
       const maintenanceProfile = await MaintenanceUser.create({
         user: user._id,

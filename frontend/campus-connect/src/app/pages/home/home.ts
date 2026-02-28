@@ -36,7 +36,6 @@ export class Home implements OnInit, OnDestroy {
 
     this.announcementsService.getAnnouncements().subscribe({
       next: (all: Announcement[]) => {
-        console.log('home announcements', all);   // <‑‑ add this line
         const sorted = [...all].sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );

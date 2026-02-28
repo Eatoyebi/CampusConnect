@@ -58,10 +58,12 @@ export class UserService {
     return this.http.get<User>(`${this.apiUrl}/me`);
   }
 
-  searchUsers(q: string) {
+  searchUsers(q: string): Observable<User[]> {
+    const params = new HttpParams().set('q', q.trim());
+  
     return this.http.get<User[]>(`${this.apiUrl}/search`, {
-      params: { q }
+      params
     });
-  }
 
+}
 }
