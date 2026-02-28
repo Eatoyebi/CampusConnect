@@ -1,17 +1,17 @@
 <div class="profile-container" *ngIf="!loading && user; else loadingOrError">
   <div class="profile-card">
-    <img
-      [src]="
-        user && user.profileImage
-          ? (user.profileImage.startsWith('http')
-              ? user.profileImage
-              : 'http://localhost:5050/uploads/' + user.profileImage)
-          : '/profile-icon.svg'
-      "
-      alt="{{ user?.name || 'Profile Image' }}"
-      title="{{ user?.name || 'Profile Image' }}"
-      class="profile-image"
-    />
+
+    
+   <img
+  [src]="
+    (editing && getPreviewImageUrl())
+      ? getPreviewImageUrl()
+      : (getProfileImageUrl(user?.profileImage) || '/profile-icon.svg')
+  "
+  alt="{{ user?.name || 'Profile Image' }}"
+  title="{{ user?.name || 'Profile Image' }}"
+  class="profile-image"
+/>
 
     <div *ngIf="!editing; else editForm">
       <h2>{{ user?.name }}</h2>
@@ -45,7 +45,6 @@
         <button type="button" (click)="goToAdminLookup()">
           Open Admin User Lookup
         </button>
-
       </div>
 
       <button (click)="toggleEdit()">Edit Profile</button>
@@ -82,6 +81,7 @@
         </div>
       </form>
     </ng-template>
+
   </div>
 </div>
 

@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService, User } from '../../shared/services/user.service';
+import { RouterLink } from '@angular/router'; 
 import { AnnouncementsService, Announcement } from '../../pages/ra-announcements/announcements.service';
 import { TipsService, Tip } from '../../shared/services/tips.service';
+import { MeService, MeUser } from '../../shared/me.service';
 import { RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 @Component({
@@ -10,10 +11,17 @@ import { of } from 'rxjs';
   standalone: true,
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, RouterLink],
 })
 export class Home implements OnInit, OnDestroy {
-  user: User | null = null;
+  private meService = inject(MeService);
+  private announcementsService = inject(AnnouncementsService);
+  private tipsService = inject(TipsService);
+
+
+  user: MeUser | null = null;
+  loadingUser = true;
+
   recentAnnouncements: Announcement[] = [];
   tips: Tip[] = [];
   activeTipIndex = 0;
@@ -54,9 +62,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.tipIntervalId) {
-      clearInterval(this.tipIntervalId);
-    }
+    if (this.tipIntervalId) clearInterval(this.tipIntervalId);
   }
 
   private startTipRotation(): void {
@@ -64,7 +70,7 @@ export class Home implements OnInit, OnDestroy {
 
     this.tipIntervalId = setInterval(() => {
       this.activeTipIndex = (this.activeTipIndex + 1) % this.tips.length;
-    }, 6000); // 6 seconds
+    }, 6000);
   }
 
   get activeTip(): Tip | null {

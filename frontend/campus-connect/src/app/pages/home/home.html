@@ -1,4 +1,36 @@
-<div class="home-wrapper" *ngIf="user as u">
+<!-- =========================
+     LOADING STATE 
+     ========================= -->
+<div class="home-wrapper" *ngIf="loadingUser">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="skel skel-hello"></div>
+      <div class="skel skel-title"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line short"></div>
+      <div class="skel skel-btn"></div>
+    </div>
+  </section>
+
+  <section class="main-grid">
+    <div class="card skel-card">
+      <div class="skel skel-subtitle"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line short"></div>
+    </div>
+
+    <div class="card skel-card">
+      <div class="skel skel-subtitle"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line short"></div>
+    </div>
+  </section>
+</div>
+
+<!-- =========================
+    LOGGED IN (personalized dashboard)
+     ========================= -->
+<div class="home-wrapper" *ngIf="!loadingUser && user as u">
   <section class="hero">
     <div class="hero-card">
       <p class="hero-hello">Hi {{ u.name }},</p>
@@ -66,16 +98,75 @@
   </section>
 </div>
 
-<div class="home-wrapper" *ngIf="!user">
+<!-- =========================
+     LOGGED OUT
+     ========================= -->
+<div class="home-wrapper" *ngIf="!loadingUser && !user">
   <section class="hero">
     <div class="hero-card">
-      <p class="hero-hello">Hi there,</p>
-      <h1 class="hero-title">Welcome to CampusConnect!</h1>
+      <p class="hero-hello">Welcome </p>
+      <h1 class="hero-title">CampusConnect keeps residence life in one place.</h1>
       <p class="hero-text">
-        We’re loading your info. Refresh if this takes too long.
+        Chat with your RA, stay on top of announcements, and submit maintenance requests—fast.
       </p>
+
+      <div class="hero-actions">
+        <a class="btn primary" routerLink="/login">Sign in</a>
+
+      </div>
     </div>
   </section>
+
+  <section class="feature-grid">
+    <div class="card feature-card">
+      <h3 class="feature-title">Chat</h3>
+      <p class="feature-text">Message your floor and RA channels with real-time updates and moderation.</p>
+    </div>
+
+    <div class="card feature-card">
+      <h3 class="feature-title">Maintenance</h3>
+      <p class="feature-text">Submit requests, track status, and reduce back-and-forth with clear details.</p>
+    </div>
+
+    <div class="card feature-card">
+      <h3 class="feature-title">Announcements</h3>
+      <p class="feature-text">See the latest building reminders, events, and need-to-know updates.</p>
+    </div>
+  </section>
+
+ <section id="how" class="how-section">
+  <div class="section-header">
+    <h2>How it works</h2>
+    <span class="section-subtitle">Simple, secure access for your residence community</span>
+  </div>
+
+  <div class="how-grid">
+    <div class="card how-card">
+      <div class="how-body">
+        <h3>Sign in</h3>
+        <p>
+          Use your campus email and university code to securely access your building dashboard.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card cta-card">
+    <div>
+      <h3>Ready to continue?</h3>
+      <p class="feature-text">Sign in to access your dashboard.</p>
+    </div>
+    <a class="btn primary" routerLink="/login">Go to Login</a>
+  </div>
+</section>
+
+
+
+  <div class="fallback-note">
+    <p class="muted">
+      If you recently logged in and don’t see your dashboard, try refreshing once.
+    </p>
+  </div>
 </div>
 
 <div class="legal-links" aria-label="Legal links">

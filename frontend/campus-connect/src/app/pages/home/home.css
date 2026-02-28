@@ -165,6 +165,95 @@
   color: #888;
 }
 
+/* ============================
+   Logged-out "How it works"
+   ============================ */
+
+.how-section {
+  margin-top: 22px;
+}
+
+.how-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.how-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+}
+
+.how-body h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.how-body p {
+  margin: 0;
+  color: #555;
+  line-height: 1.45;
+}
+
+/* CTA Card */
+.cta-card {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cta-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+.feature-text {
+  margin: 0;
+  color: #555;
+}
+
+/* Button styles (RouterLink <a>) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 900;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  white-space: nowrap;
+}
+
+.btn.primary {
+  background: #c5161d;
+  color: #fff;
+}
+
+.btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(197, 22, 29, 0.18);
+}
+
+/* Responsive CTA */
+@media (max-width: 700px) {
+  .cta-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn.primary {
+    width: 100%;
+  }
+}
+
 @keyframes heroFadeIn {
   from {
     opacity: 0;
