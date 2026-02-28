@@ -1,0 +1,131 @@
+.policy-page {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .policy-card {
+    max-width: 920px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    padding: 2rem 2.25rem;
+  }
+  
+  .kicker {
+    color: #e20d2b;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 0.5rem;
+  }
+  
+  h1 {
+    margin: 0 0 0.5rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  .subhead {
+    text-align: center;
+    color: #666;
+    margin: 0 0 1.25rem;
+  }
+  
+  .meta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  
+  .btn-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fafafa;
+    color: #111;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  
+  .btn-link:hover {
+    background: #f4f4f4;
+  }
+  
+  .btn-primary {
+    background: #e20d2b;
+    color: #fff;
+    border-color: transparent;
+  }
+  
+  .btn-primary:hover {
+    background: #c80924;
+  }
+  
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(0,0,0,0.12);
+    margin: 1.25rem 0;
+  }
+  
+  .toc {
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  
+  .toc-title {
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+  }
+  
+  .toc a {
+    color: #e20d2b;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  
+  .policy {
+    line-height: 1.55;
+    font-size: 0.95rem;
+  }
+  
+  .policy h2 {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+  
+  .policy h3 {
+    margin: 0.9rem 0 0.35rem;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+  
+  .policy p {
+    margin: 0.5rem 0;
+  }
+  
+  .policy ul {
+    margin: 0.5rem 0 0.75rem 1.25rem;
+  }
+  
+  .policy li {
+    margin: 0.25rem 0;
+  }
+  
+  @media (max-width: 720px) {
+    .policy-card {
+      padding: 1.5rem 1.1rem;
+    }
+  }
+  

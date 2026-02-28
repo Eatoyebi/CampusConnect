@@ -87,7 +87,7 @@
         <div class="announcement-content">
           <h3 class="announcement-title">{{ ann.title }}</h3>
           <p class="announcement-message">
-            {{ ann.message }}
+            {{ ann.body }}
           </p>
           <p class="announcement-meta">
             {{ ann.createdAt | date: 'MMM d, y, h:mm a' }}
@@ -167,4 +167,10 @@
       If you recently logged in and don’t see your dashboard, try refreshing once.
     </p>
   </div>
+</div>
+
+<div class="legal-links" aria-label="Legal links">
+  <a routerLink="/privacy-policy">Privacy Policy</a>
+  <span class="sep">|</span>
+  <a routerLink="/accessibility">Accessibility</a>
 </div>

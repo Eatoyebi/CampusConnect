@@ -10,8 +10,15 @@ import { connectDB } from "./src/config/db.js";
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
+import announcementRoutes from "./src/routes/announcementRoutes.js";
+import buildingRoutes from "./src/routes/buildingRoutes.js";
 import ChatMessage from "./src/models/ChatMessage.js";
 import aiRoutes from "./src/routes/aiRoutes.js";
+import floorRoutes from "./src/routes/floorRoutes.js";
+import roomRoutes from "./src/routes/roomRoutes.js";
+import universityRoutes from "./src/routes/universityRoutes.js";
+import studentRoutes from "./src/routes/studentRoutes.js";
+
 import authRoutes from "./src/routes/authRoutes.js";
 import mongoose from "mongoose";
 
@@ -47,6 +54,14 @@ app.use("/api/users", userRoutes);
 app.use("/api/maintenance-tickets", ticketsRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/announcements", announcementRoutes);
+app.use("/api/buildings", buildingRoutes);
+app.use("/api/floors", floorRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/universities", universityRoutes);
+app.use("/api/students", studentRoutes);
+
+
 
 // Base test route
 app.get("/", (req, res) => {

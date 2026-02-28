@@ -4,18 +4,21 @@ import { RouterLink } from '@angular/router';
 import { AnnouncementsService, Announcement } from '../../pages/ra-announcements/announcements.service';
 import { TipsService, Tip } from '../../shared/services/tips.service';
 import { MeService, MeUser } from '../../shared/me.service';
-
+import { RouterModule } from '@angular/router';
+import { of } from 'rxjs';
+import { User, UserService } from '../../shared/services/user.service';
 @Component({
   selector: 'app-home',
   standalone: true,
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterModule, RouterLink],
 })
 export class Home implements OnInit, OnDestroy {
   private meService = inject(MeService);
   private announcementsService = inject(AnnouncementsService);
   private tipsService = inject(TipsService);
+  private userService = inject(UserService);
 
 
   user: MeUser | null = null;
@@ -27,25 +30,41 @@ export class Home implements OnInit, OnDestroy {
 
   private tipIntervalId: any;
 
-  async ngOnInit(): Promise<void> {
+
+  ngOnInit(): void {
     this.loadingUser = true;
-    try {
-      this.user = await this.meService.getMe();
-    } catch (err) {
-      // 401 expected when not logged in
-      this.user = null;
-    } finally {
-      this.loadingUser = false;
-    }
-
-    // announcements + tips are still local services
-    const allAnnouncements = this.announcementsService.getAnnouncements();
-    this.recentAnnouncements = allAnnouncements.slice(0, 3);
-
+  
+    this.userService.getCurrentUser().subscribe({
+      next: (data: User) => {
+        console.log("HOME /me returned:", data);
+        this.user = data as any;
+        this.loadingUser = false;
+      },
+      error: (err: any) => {
+        console.error("HOME /me failed:", err);
+        this.user = null;
+        this.loadingUser = false;
+      },
+    });
+  
+    // announcements (doesn't control loadingUser)
+    this.announcementsService.getAnnouncements().subscribe({
+      next: (all: Announcement[]) => {
+        const sorted = [...all].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        this.recentAnnouncements = sorted.slice(0, 3);
+      },
+      error: (err: any) => {
+        console.error("Failed to load announcements", err);
+        this.recentAnnouncements = [];
+      },
+    });
+  
     this.tips = this.tipsService.getTips();
     this.startTipRotation();
   }
-
+  
   ngOnDestroy(): void {
     if (this.tipIntervalId) clearInterval(this.tipIntervalId);
   }

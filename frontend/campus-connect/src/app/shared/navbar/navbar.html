@@ -19,6 +19,9 @@
     <a *ngIf="canSeeAdminLookup()" routerLink="/admin/users" routerLinkActive="active">
       Admin Users
     </a>
+    <a *ngIf="canSeeAdminLookup()" routerLink="/admin-housing" routerLinkActive="active">
+      Admin Housing
+    </a>
 
     <a *ngIf="isLoggedIn()" routerLink="/profile" routerLinkActive="active" aria-label="Profile">
       Profile

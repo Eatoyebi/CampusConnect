@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { roleGuard } from './shared/guards/role.guard';
+import { AdminHousingComponent } from './pages/admin-housing/admin-housing.component';
 import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
@@ -53,6 +54,31 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/admin-user-lookup/admin-user-lookup.component').then(m => m.AdminUserLookupComponent)
   },
+  {
+    path: 'admin-housing',
+    component: AdminHousingComponent
+  },
+  {
+    path: 'privacy-policy',
+    loadComponent: () =>
+      import('./pages/privacy-policy/privacy-policy.component')
+        .then(m => m.PrivacyPolicyComponent)
+  },
+  
+  {
+    path: 'accessibility',
+    loadComponent: () =>
+      import('./pages/accessibility/accessibility.component')
+        .then(m => m.AccessibilityComponent)
+  },
+  
+  {
+    path: 'acceptable-use',
+    loadComponent: () =>
+      import('./pages/acceptable-use/acceptable-use.component')
+        .then(m => m.AcceptableUseComponent)
+  },
+  
 
   { path: '**', redirectTo: '' }
 ];
