@@ -1,44 +1,66 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-export type Role = 'student' | 'ra' | 'admin';
+export type Role = 'student' | 'ra' | 'admin' | 'maintenance' | 'staff';
+
+export type AuthedUser = {
+  _id: string;
+  name: string;
+  email: string;
+  role: Role;
+  universityId?: string;
+
+  raAssignment?: { building?: string; floor?: string };
+  housing?: { building?: string; roomNumber?: string; raId?: string };
+};
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  demoUsers = {
-    ra: '691256de5e28c208bd523047',
-    student: '6980f73a4727663ded2c0308',
-    admin: '6980f77d4727663ded2c030a',
-  } as const;
+  private apiBase = 'http://localhost:5050/api/auth';
 
-  private roleKey: keyof typeof this.demoUsers = 'student';
+  private userSubject = new BehaviorSubject<AuthedUser | null>(null);
+  user$ = this.userSubject.asObservable();
 
-  setRole(roleKey: keyof typeof this.demoUsers) {
-    this.roleKey = roleKey;
-    localStorage.setItem('demoRole', roleKey);
+  constructor(private http: HttpClient) {}
+
+  /** Call on app start to restore session from HttpOnly cookie */
+  bootstrap(): Observable<AuthedUser> {
+    return this.http
+      .get<AuthedUser>(`${this.apiBase}/me`, { withCredentials: true })
+      .pipe(tap((u) => this.userSubject.next(u)));
   }
 
-  loadFromStorage() {
-    const saved = localStorage.getItem('demoRole') as keyof typeof this.demoUsers | null;
-    if (saved && this.demoUsers[saved]) this.roleKey = saved;
+  login(payload: { email: string; password: string; universityId: string }): Observable<any> {
+    return this.http
+      .post(`${this.apiBase}/login`, payload, { withCredentials: true })
+      .pipe(
+        tap((res: any) => {
+          // Your backend returns { message, user } on login
+          if (res?.user) this.userSubject.next(res.user as AuthedUser);
+        })
+      );
   }
 
-  getRoleKey() {
-    return this.roleKey;
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiBase}/logout`, {}, { withCredentials: true }).pipe(
+      tap(() => this.userSubject.next(null))
+    );
   }
 
-  getUserId(): string {
-    return this.demoUsers[this.roleKey];
+  getUserSnapshot(): AuthedUser | null {
+    return this.userSubject.value;
   }
 
-  getRole(): Role {
-    return this.roleKey;
+  isLoggedIn(): boolean {
+    return !!this.userSubject.value;
   }
 
-  isAdmin() {
-    return this.getRole() === 'admin';
+  isAdmin(): boolean {
+    return this.userSubject.value?.role === 'admin';
   }
 
-  isRA() {
-    return this.getRole() === 'ra';
+  isRA(): boolean {
+    return this.userSubject.value?.role === 'ra';
   }
 }

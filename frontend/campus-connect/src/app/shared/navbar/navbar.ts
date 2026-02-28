@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router,RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { DevSessionService, Role } from '../services/dev-session.service';
+import { AuthService, Role } from '../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,33 +12,29 @@ import { DevSessionService, Role } from '../services/dev-session.service';
   styleUrls: ['./navbar.css']
 })
 export class Navbar implements OnInit {
-  private session = inject(DevSessionService);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
-  demoUsers: Record<Role, string> = {
-    ra: '691256de5e28c208bd523047',
-    student: '6980f73a4727663ded2c0308',
-    admin: '6980f77d4727663ded2c030a'
-  };
+  user$ = this.auth.user$;
 
-  selectedRole: Role = 'student';
+ngOnInit(): void {
+    this.auth.bootstrap().subscribe({
+      next: () => {},
+      error: () => {
+    
+      }
+    });
+  }
+ 
 
-  ngOnInit(): void {
-    this.selectedRole = this.session.role;
-
-    if (!this.session.userId) {
-      this.session.setSession(this.selectedRole, this.demoUsers[this.selectedRole]);
-    }
+   get role(): Role | null {
+    return this.auth.getUserSnapshot()?.role ?? null;
   }
 
-  applyRole(): void {
-    this.session.setSession(this.selectedRole, this.demoUsers[this.selectedRole]);
-    window.location.reload();
-  }
 
-  get role(): Role {
-    return this.session.role;
+   isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
   }
-
   canSeeAnnouncements(): boolean {
     return this.role === 'ra' || this.role === 'admin';
   }
@@ -57,5 +53,15 @@ export class Navbar implements OnInit {
 
   canSeeChat(): boolean {
     return true;
+  }
+
+  logout(): void {
+    this.auth.logout().subscribe({
+      next: () => this.router.navigateByUrl('/login'),
+      error: () => {
+        // even if the API fails, clear UI session + go to login
+        this.router.navigateByUrl('/login');
+      }
+    });
   }
 }

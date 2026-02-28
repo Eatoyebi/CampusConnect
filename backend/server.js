@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
+import cookieParser from "cookie-parser";
 import { Server as SocketIOServer } from "socket.io";
 import { connectDB } from "./src/config/db.js";
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
@@ -11,6 +12,8 @@ import userRoutes from "./src/routes/userRoutes.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import ChatMessage from "./src/models/ChatMessage.js";
 import aiRoutes from "./src/routes/aiRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -23,12 +26,23 @@ const app = express();
 const PORT = process.env.BACKEND_PORT || 5050;
 
 // Middleware
-app.use(cors());
+
+app.use(cookieParser());
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], 
+  })
+);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Mount routes
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/maintenance-tickets", ticketsRouter);
 app.use("/api/chat", chatRoutes);

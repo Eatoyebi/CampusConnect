@@ -5,27 +5,44 @@
 
   <div class="links">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-    <a routerLink="/chat" routerLinkActive="active">Chat</a>
+
+    <a *ngIf="canSeeChat()" routerLink="/chat" routerLinkActive="active">Chat</a>
 
     <a *ngIf="canSeeAnnouncements()" routerLink="/announcements" routerLinkActive="active">
       Announcements
     </a>
 
-    <a routerLink="/maintenance" routerLinkActive="active">Maintenance</a>
+    <a *ngIf="canSeeMaintenance()" routerLink="/maintenance" routerLinkActive="active">
+      Maintenance
+    </a>
 
     <a *ngIf="canSeeAdminLookup()" routerLink="/admin/users" routerLinkActive="active">
       Admin Users
     </a>
 
-    <a routerLink="/profile" routerLinkActive="active" aria-label="Profile">Profile</a>
+    <a *ngIf="isLoggedIn()" routerLink="/profile" routerLinkActive="active" aria-label="Profile">
+      Profile
+    </a>
+
+    <a *ngIf="!isLoggedIn()" routerLink="/login" routerLinkActive="active">
+      Login
+    </a>
   </div>
 
-  <div class="role-switch">
-  <label for="roleSelect">View as</label>
-  <select id="roleSelect" [(ngModel)]="selectedRole" (change)="applyRole()">
-    <option value="student">Student</option>
-    <option value="ra">RA</option>
-    <option value="admin">Admin</option>
-  </select>
-</div>
+  <div class="right">
+   
+    <div class="session" *ngIf="(user$ | async) as u; else loggedOut">
+      <span class="pill">
+        {{ (u.name || u.email) }} • {{ (u.role || '') | uppercase }}
+      </span>
+
+      <button class="logout" type="button" (click)="logout()">
+        Logout
+      </button>
+    </div>
+
+    <ng-template #loggedOut>
+      <span class="pill pill-off">Not logged in</span>
+    </ng-template>
+  </div>
 </nav>

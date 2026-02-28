@@ -1,19 +1,20 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService, User } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
+
+import { UserService, User } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.css']
+  styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent implements OnInit {
-  private userService = inject(UserService);
   private router = inject(Router);
+  private userService = inject(UserService);
 
   user: User | null = null;
   loading = true;
@@ -28,18 +29,19 @@ export class UserProfileComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-  this.userService.getCurrentUser().subscribe({
-    next: (data) => {
-      this.user = data;
-      this.loading = false;
-    },
-    error: (err) => {
-      console.error(err);
-      this.errorMessage = 'Unable to load profile.';
-      this.loading = false;
-    }
-  });
-}
+    
+    this.userService.getCurrentUser().subscribe({
+      next: (data: User) => {
+        this.user = data;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.errorMessage = 'Unable to load profile.';
+        this.loading = false;
+      },
+    });
+  }
 
   goToAdminLookup(): void {
     this.router.navigate(['/admin/users']);
@@ -59,11 +61,8 @@ export class UserProfileComponent implements OnInit {
         bio: this.user.bio,
       };
 
-      const img = this.user.profileImage;
-      this.previewImage = img
-        ? (img.startsWith('http') ? img : `http://localhost:5050/uploads/${img}`)
-        : null;
 
+      this.previewImage = this.getProfileImageUrl(this.user.profileImage);
     } else {
       this.updatedUser = {};
       this.selectedFile = null;
@@ -102,11 +101,6 @@ export class UserProfileComponent implements OnInit {
         this.user = {
           ...user,
           ...updated,
-          profileImage: updated.profileImage
-            ? (updated.profileImage.startsWith('http')
-                ? updated.profileImage
-                : `http://localhost:5050/uploads/${updated.profileImage}`)
-            : user.profileImage
         };
 
         this.previewImage = null;
@@ -117,7 +111,7 @@ export class UserProfileComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.errorMessage = 'Error updating profile.';
-      }
+      },
     });
   }
 
@@ -135,7 +129,7 @@ export class UserProfileComponent implements OnInit {
         this.user = {
           ...user,
           ...updated,
-          profileImage: '/profile-icon.svg'
+          profileImage: '/profile-icon.svg',
         };
 
         this.previewImage = null;
@@ -146,7 +140,27 @@ export class UserProfileComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.errorMessage = 'Error removing profile image.';
-      }
+      },
     });
+  }
+
+
+  
+  getProfileImageUrl(img?: string | null): string | null {
+    if (!img) return null;
+
+    const s = String(img);
+
+    if (s.startsWith('http')) return s;
+    if (s.startsWith('/')) return s;
+
+    return `http://localhost:5050/uploads/${s}`;
+  }
+
+  getPreviewImageUrl(): string | null {
+    if (!this.previewImage) return null;
+    return typeof this.previewImage === 'string'
+      ? this.previewImage
+      : null;
   }
 }
