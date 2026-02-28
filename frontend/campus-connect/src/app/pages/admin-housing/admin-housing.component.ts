@@ -57,6 +57,7 @@ export class AdminHousingComponent implements OnInit, OnDestroy {
         )
         .subscribe({
             next: (users) => {
+                console.log("search results:", users);
               this.students = users.filter((u) => u.role === "student");
               this.showResults = this.students.length > 0;
             },
@@ -97,8 +98,8 @@ export class AdminHousingComponent implements OnInit, OnDestroy {
 
   searchStudents() {
     const trimmed = this.search.trim();
+    console.log("searchStudents fired:", trimmed); 
   
-    // If they cleared the box, clear UI state too
     if (!trimmed) {
       this.students = [];
       this.selectedStudent = null;

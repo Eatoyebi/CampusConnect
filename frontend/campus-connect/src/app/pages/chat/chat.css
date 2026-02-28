@@ -438,8 +438,16 @@ textarea:focus {
 .chat-footer {
   position: absolute;
   bottom: 12px;
-  right: 20px;
-  font-size: 13px;
+  right: auto;
+  left: 20px;
+  font-size: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #777;
+
 }
 
 .chat-footer a {

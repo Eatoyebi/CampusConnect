@@ -85,7 +85,8 @@ export class UserService {
     const params = new HttpParams().set('q', q.trim());
   
     return this.http.get<User[]>(`${this.apiUrl}/search`, {
-      params
+      params,
+      withCredentials: true,
     });
 
 }

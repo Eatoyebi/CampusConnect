@@ -6,6 +6,7 @@ import { TipsService, Tip } from '../../shared/services/tips.service';
 import { MeService, MeUser } from '../../shared/me.service';
 import { RouterModule } from '@angular/router';
 import { of } from 'rxjs';
+import { User, UserService } from '../../shared/services/user.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -17,6 +18,7 @@ export class Home implements OnInit, OnDestroy {
   private meService = inject(MeService);
   private announcementsService = inject(AnnouncementsService);
   private tipsService = inject(TipsService);
+  private userService = inject(UserService);
 
 
   user: MeUser | null = null;
@@ -28,20 +30,24 @@ export class Home implements OnInit, OnDestroy {
 
   private tipIntervalId: any;
 
-  constructor(
-    private userService: UserService,
-    private announcementsService: AnnouncementsService,
-    private tipsService: TipsService
-  ) {}
 
   ngOnInit(): void {
+    this.loadingUser = true;
+  
     this.userService.getCurrentUser().subscribe({
-      next: (data: User) => (this.user = data),
-      error: (err: any) => console.error('Failed to load current user', err),
+      next: (data: User) => {
+        console.log("HOME /me returned:", data);
+        this.user = data as any;
+        this.loadingUser = false;
+      },
+      error: (err: any) => {
+        console.error("HOME /me failed:", err);
+        this.user = null;
+        this.loadingUser = false;
+      },
     });
   
-    // Load announcements from DB
-
+    // announcements (doesn't control loadingUser)
     this.announcementsService.getAnnouncements().subscribe({
       next: (all: Announcement[]) => {
         const sorted = [...all].sort(
@@ -50,17 +56,15 @@ export class Home implements OnInit, OnDestroy {
         this.recentAnnouncements = sorted.slice(0, 3);
       },
       error: (err: any) => {
-        console.error('Failed to load announcements', err);
+        console.error("Failed to load announcements", err);
         this.recentAnnouncements = [];
-      }
+      },
     });
-    
-    
   
     this.tips = this.tipsService.getTips();
     this.startTipRotation();
   }
-
+  
   ngOnDestroy(): void {
     if (this.tipIntervalId) clearInterval(this.tipIntervalId);
   }
