@@ -1,0 +1,92 @@
+<div class="login-page">
+  <div class="login-shell">
+    <!-- Left brand panel (hidden on small screens) -->
+    <aside class="brand-panel" aria-hidden="true">
+      <div class="brand-inner">
+        <div class="brand-mark">CC</div>
+        <h2 class="brand-title">CampusConnect</h2>
+        <p class="brand-text">
+          Announcements, maintenance requests, and community chat — all scoped to your university and role.
+        </p>
+
+        <div class="brand-badges">
+          <span class="badge">Role-based access</span>
+          <span class="badge">University scoped</span>
+          <span class="badge">JWT in HttpOnly</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Form -->
+    <section class="form-panel">
+      <div class="form-head">
+        <h1>Sign in</h1>
+        <p>Use your campus email to continue.</p>
+      </div>
+
+      <form class="form" (ngSubmit)="onSubmit()" autocomplete="on">
+        <label>
+          <span>Email</span>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="name@mail.uc.edu"
+            required
+            autocomplete="email"
+          />
+        </label>
+
+        <label>
+          <span>Password</span>
+
+          <div class="password-row">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            />
+
+            <button
+              type="button"
+              class="ghost"
+              (click)="showPassword = !showPassword"
+              [attr.aria-pressed]="showPassword"
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+        </label>
+
+        <label>
+          <span>University</span>
+          <input
+            type="text"
+            name="universityId"
+            [(ngModel)]="universityId"
+            placeholder="UC"
+            required
+          />
+          <small class="hint">Example: UC</small>
+        </label>
+
+        <div class="error" *ngIf="errorMessage">
+          <strong>Login failed.</strong>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <button class="primary" type="submit" [disabled]="loading">
+          <span *ngIf="!loading">Login</span>
+          <span *ngIf="loading">Signing in…</span>
+        </button>
+
+        <div class="fineprint">
+          By signing in, you agree to use CampusConnect responsibly.
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
