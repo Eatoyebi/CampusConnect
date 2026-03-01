@@ -1,0 +1,7 @@
+*{
+    align-items: center;
+}
+.ticket-table{
+    display: flex;
+    align-items: center;
+}

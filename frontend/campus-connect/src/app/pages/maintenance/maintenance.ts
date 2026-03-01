@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 
 interface MaintenanceRequest {
@@ -12,7 +13,7 @@ interface MaintenanceRequest {
 }
 @Component({
   selector: 'app-maintenance',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './maintenance.html',
   styleUrl: './maintenance.css'
 })

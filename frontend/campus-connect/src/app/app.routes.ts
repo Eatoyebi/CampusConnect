@@ -27,8 +27,14 @@ export const routes: Routes = [
   {
     path: 'maintenance',
     canActivate: [roleGuard],
-    data: { roles: ['student', 'ra', 'admin'] },
+    data: { roles: ['student', 'ra', 'admin', 'maintenance' ] },
     loadComponent: () => import('./pages/maintenance/maintenance').then(m => m.Maintenance)
+  },
+  {
+    path: 'maintenance/ticket-list',
+    canActivate: [roleGuard],
+    data: { roles: ['student', 'ra', 'admin', 'maintenance'] },
+    loadComponent: () => import('./pages/maintenance/ticket-list/ticket-list').then(m => m.TicketList)
   },
   {
     path: 'profile',

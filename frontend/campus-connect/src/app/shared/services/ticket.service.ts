@@ -8,7 +8,7 @@ import { Ticket } from '../../models/ticket.model';
 })
 
 export class TicketService {
-    private baseUrl = '/api/tickets';
+    private baseUrl = '/api/maintenance';
 
     constructor(private http: HttpClient) {}
 
@@ -34,7 +34,7 @@ export class TicketService {
     }
 
     getAllResidentTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(`${this.baseUrl}/residents`);
+        return this.http.get<Ticket[]>(`${this.baseUrl}/all-tickets`);
     }
 
     getTicketById(id: string): Observable<Ticket> {
