@@ -99,6 +99,9 @@ export const updateTicketStatus = async (req, res) => {
       { new: true }
     );
 
+    if (!ticket) {
+      return res.status(404).json({ message: "Maintenance ticket not found" });
+    }
     return res.json(ticket);
   } catch (err) {
     console.error("updateTicketStatus error:", err);
