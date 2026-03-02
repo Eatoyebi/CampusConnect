@@ -30,6 +30,7 @@ const StudentProfileSchema = new mongoose.Schema(
     housing: {
       building: String,
       roomNumber: String,
+      ra: String,
     },
   },
   { timestamps: true }
