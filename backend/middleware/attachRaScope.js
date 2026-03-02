@@ -7,7 +7,7 @@ const { ObjectId } = mongoose.Types;
 
 export default async function attachRaScope(req, res, next) {
   try {
-    if (req.user?.role !== "RA") {
+    if (req.user?.role !== "ra") {
       req.raScope = null;
       return next();
     }
