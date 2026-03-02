@@ -6,34 +6,34 @@ import { fileURLToPath } from "url";
 import { createServer } from "http";
 import cookieParser from "cookie-parser";
 import { Server as SocketIOServer } from "socket.io";
-
 import { connectDB } from "./src/config/db.js";
-
 import ticketsRouter from "./src/routes/maintenanceTicketRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
-import ChatMessage from "./src/models/ChatMessage.js";
-import aiRoutes from "./src/routes/aiRoutes.js";
-
-import studentProfileRoutes from "./src/routes/studentProfileRoutes.js";
-import authRoutes from "./src/routes/authRoutes.js";
-
 import announcementRoutes from "./src/routes/announcementRoutes.js";
 import buildingRoutes from "./src/routes/buildingRoutes.js";
+import ChatMessage from "./src/models/ChatMessage.js";
+import aiRoutes from "./src/routes/aiRoutes.js";
 import floorRoutes from "./src/routes/floorRoutes.js";
 import roomRoutes from "./src/routes/roomRoutes.js";
 import universityRoutes from "./src/routes/universityRoutes.js";
 import studentRoutes from "./src/routes/studentRoutes.js";
 
+import authRoutes from "./src/routes/authRoutes.js";
+import mongoose from "mongoose";
+
 dotenv.config();
 
+// Fix __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Create Express app FIRST (before app.use)
 const app = express();
 const PORT = process.env.PORT || process.env.BACKEND_PORT || 5050;
 
 // Middleware
+
 app.use(cookieParser());
 app.use(express.json());
 
@@ -46,22 +46,19 @@ app.use(
   cors({
     origin: allowedOrigins,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], 
   })
 );
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
+// Mount routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/maintenance-tickets", ticketsRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/ai", aiRoutes);
-
-app.use("/api/student-profiles", studentProfileRoutes);
-
 app.use("/api/announcements", announcementRoutes);
 app.use("/api/buildings", buildingRoutes);
 app.use("/api/floors", floorRoutes);
@@ -69,12 +66,14 @@ app.use("/api/rooms", roomRoutes);
 app.use("/api/universities", universityRoutes);
 app.use("/api/students", studentRoutes);
 
+
+
 // Base test route
 app.get("/", (req, res) => {
   res.send("Campus Connect API is running...");
 });
 
-// Connect DB
+// Connect DB ONCE
 connectDB(process.env.MONGO_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
@@ -82,20 +81,19 @@ connectDB(process.env.MONGO_URL)
     process.exit(1);
   });
 
-// HTTP server + Socket.IO
+// Create HTTP server + Socket.IO
 const server = createServer(app);
 
 const io = new SocketIOServer(server, {
   cors: {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
-    credentials: true,
   },
 });
 
 app.set("io", io);
 
-// Real time chat events
+// Real-time chat events
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
@@ -140,26 +138,27 @@ io.on("connection", (socket) => {
   });
 
   socket.on("moderation_delete_message", async ({ messageId }) => {
-    try {
-      if (!messageId) return;
+  try {
+    if (!messageId) return;
 
-      const msg = await ChatMessage.findById(messageId);
-      if (!msg) return;
+    const msg = await ChatMessage.findById(messageId);
+    if (!msg) return;
 
-      msg.isDeleted = true;
-      msg.deletedAt = new Date();
-      await msg.save();
+    msg.isDeleted = true;
+    msg.deletedAt = new Date();
+    await msg.save();
 
-      io.to(msg.room).emit("message_deleted", { messageId });
-    } catch (err) {
-      console.error("moderation_delete_message error:", err);
-    }
-  });
-
+    io.to(msg.room).emit("message_deleted", { messageId });
+  } catch (err) {
+    console.error("moderation_delete_message error:", err);
+  }
+});
+  
   socket.on("disconnect", () => {
     console.log(`Socket disconnected: ${socket.id}`);
   });
 });
+
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
