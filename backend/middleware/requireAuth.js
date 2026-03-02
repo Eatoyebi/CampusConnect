@@ -2,7 +2,6 @@ import User from "../src/models/User.js";
 
 export default async function requireAuth(req, res, next) {
   try {
-
     const devUser = await User.findOne();
     if (!devUser) {
       return res.status(401).json({
@@ -10,7 +9,12 @@ export default async function requireAuth(req, res, next) {
       });
     }
 
-    req.user = { id: devUser._id.toString(), role: devUser.role || "student" };
+    req.user = {
+      _id: devUser._id,
+      id: devUser._id.toString(),
+      role: (devUser.role || "Student").toUpperCase(),
+    };
+
     next();
   } catch (err) {
     console.error("requireAuth error:", err);

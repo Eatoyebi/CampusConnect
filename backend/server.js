@@ -11,6 +11,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import chatRoutes from "./src/routes/chatRoutes.js";
 import ChatMessage from "./src/models/ChatMessage.js";
 import aiRoutes from "./src/routes/aiRoutes.js";
+import studentProfileRoutes from "./src/routes/studentProfileRoutes.js";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/maintenance-tickets", ticketsRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/student-profiles", studentProfileRoutes);
 
 // Base test route
 app.get("/", (req, res) => {
