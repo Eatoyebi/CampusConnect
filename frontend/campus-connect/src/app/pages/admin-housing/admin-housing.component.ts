@@ -32,6 +32,17 @@ export class AdminHousingComponent implements OnInit, OnDestroy {
   private search$ = new Subject<string>();
   private sub = new Subscription();
 
+  // RA Assignment State
+  raSelectedBuildingId = "";
+  raSelectedFloorId = "";
+  raFloors: Floor[] = [];
+
+  ras: User[] = [];
+  selectedRaId = "";
+
+  raAssignments: any[] = [];
+  raStatusMsg = "";
+
   constructor(
     private housingService: HousingService,
     private userService: UserService
@@ -112,12 +123,12 @@ export class AdminHousingComponent implements OnInit, OnDestroy {
     this.search$.next(trimmed);
   }
 
-  selectStudent(s: User) {
+  selectStudent(s: any) {
     this.selectedStudent = s;
     this.selectedStudentId = s._id;
     this.search = `${s.name} (${s.email})`;
     this.showResults = false;
-    this.students = []; // optional, clears dropdown
+    this.students = [];
     this.statusMsg = "";
   }
   
@@ -125,8 +136,12 @@ export class AdminHousingComponent implements OnInit, OnDestroy {
     setTimeout(() => (this.showResults = false), 150);
   }
 
-
   assign() {
+    console.log("assign payload", {
+      studentProfileId: this.selectedStudentId,
+      roomId: this.selectedRoomId,
+      selectedStudent: this.selectedStudent
+    });
     this.statusMsg = "";
   
     if (!this.selectedStudentId || !this.selectedRoomId) return;
@@ -134,6 +149,74 @@ export class AdminHousingComponent implements OnInit, OnDestroy {
     this.housingService.assignRoom(this.selectedStudentId, this.selectedRoomId).subscribe({
       next: () => (this.statusMsg = "Room assigned successfully."),
       error: (err) => (this.statusMsg = err?.error?.message || "Failed to assign room."),
+    });
+  }
+    // ===============================
+  // RA Assignment Methods
+  // ===============================
+
+  onRaBuildingChange() {
+    this.raSelectedFloorId = "";
+    this.selectedRaId = "";
+    this.raFloors = [];
+    this.raAssignments = [];
+    this.raStatusMsg = "";
+
+    if (!this.raSelectedBuildingId) return;
+
+    this.housingService.getFloors(this.raSelectedBuildingId).subscribe({
+      next: (floors) => (this.raFloors = floors),
+      error: (err) => console.error("Failed to load RA floors", err),
+    });
+  }
+
+  onRaFloorChange() {
+    this.selectedRaId = "";
+    this.raAssignments = [];
+    this.raStatusMsg = "";
+
+    if (!this.raSelectedFloorId) return;
+
+    // Load RAs
+    this.userService.getUsersByRole("ra").subscribe({
+      next: (users) => (this.ras = users),
+      error: (e) => console.error("Failed to load RAs", e),
+    });
+
+    // Load assignments for selected floor
+    this.housingService.getRaAssignments(this.raSelectedFloorId).subscribe({
+      next: (assignments) => (this.raAssignments = assignments),
+      error: (e) => console.error("Failed to load RA assignments", e),
+    });
+  }
+
+  assignRaToFloor() {
+    this.raStatusMsg = "";
+
+    if (!this.selectedRaId || !this.raSelectedFloorId) return;
+
+    this.housingService.assignRaToFloor(this.selectedRaId, this.raSelectedFloorId).subscribe({
+      next: () => {
+        this.raStatusMsg = "RA assigned successfully.";
+        this.onRaFloorChange(); // refresh assignments list
+      },
+      error: (err) => {
+        this.raStatusMsg = err?.error?.message || "Failed to assign RA.";
+      },
+    });
+  }
+
+  removeRaAssignment(assignmentId: string) {
+    this.raStatusMsg = "";
+
+    this.housingService.removeRaAssignment(assignmentId).subscribe({
+      next: () => {
+        this.raStatusMsg = "Assignment removed.";
+        this.onRaFloorChange(); // refresh assignments list
+      },
+      error: (err) => {
+        this.raStatusMsg = err?.error?.message || "Failed to remove assignment.";
+      },
     });
   }
 }

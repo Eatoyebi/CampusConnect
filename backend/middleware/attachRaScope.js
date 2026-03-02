@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import StaffUser from "../src/models/StaffUser.js";
 import RaAssignment from "../src/models/RaAssignment.js";
 import Room from "../src/models/Room.js";
 
@@ -17,27 +16,22 @@ export default async function attachRaScope(req, res, next) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const staff = await StaffUser.findOne({ user: userId }).select("_id user");
-    if (!staff?._id) {
-      return res.status(403).json({ message: "RA staff profile not found" });
-    }
-
     const assignments = await RaAssignment.find({
-      raId: staff._id,
+      raId: userId,
       active: { $ne: false },
     }).select("floorId");
 
     const floorIds = assignments.map((a) => a.floorId);
 
     if (floorIds.length === 0) {
-      req.raScope = { staffProfileId: staff._id, floorIds: [], roomIds: [] };
+      req.raScope = { raUserId: userId, floorIds: [], roomIds: [] };
       return next();
     }
 
     const rooms = await Room.find({ floorId: { $in: floorIds } }).select("_id");
     const roomIds = rooms.map((r) => r._id);
 
-    req.raScope = { staffProfileId: staff._id, floorIds, roomIds };
+    req.raScope = { raUserId: userId, floorIds, roomIds };
     return next();
   } catch (err) {
     console.error("attachRaScope error:", err);

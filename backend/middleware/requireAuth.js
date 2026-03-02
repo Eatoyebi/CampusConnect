@@ -20,7 +20,12 @@ export default async function requireAuth(req, res, next) {
       req.user = {
         _id: user._id,
         id: user._id.toString(),
-        role: (user.role || "STUDENT").toUpperCase(),
+        name: user.name,
+        email: user.email,
+        universityId: user.universityId,
+        role: (user.role || "student").toLowerCase(),
+        housing: user.housing,
+        raAssignment: user.raAssignment,
       };
 
       req.auth = payload;

@@ -2,8 +2,16 @@ import mongoose from "mongoose";
 
 const RaAssignmentSchema = new mongoose.Schema(
   {
-    raId: { type: mongoose.Schema.Types.ObjectId, ref: "StaffProfile", required: true },
-    floorId: { type: mongoose.Schema.Types.ObjectId, ref: "Floor", required: true },
+    raId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "User", 
+      required: true 
+    },
+    floorId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Floor", 
+      required: true 
+    },
     active: { type: Boolean, default: true },
   },
   { timestamps: true }

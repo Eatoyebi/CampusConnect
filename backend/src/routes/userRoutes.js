@@ -12,12 +12,10 @@ import {
   searchUsers,
   getMe,
   updateMe,
+  assignRaToFloor,
 } from "../controllers/userController.js";
 
-import {
-  validateUserInput,
-  validateUserUpdate
-} from "../../middleware/validation.js";
+import { validateUserInput, validateUserUpdate } from "../../middleware/validation.js";
 
 const router = express.Router();
 
@@ -33,6 +31,14 @@ router.put(
 
 // Admin
 router.get("/admin/users", requireAuth, requireAdmin, searchUsers);
+
+// RA assignment (admin only)
+router.put(
+  "/admin/users/:raId/ra-assignment",
+  requireAuth,
+  requireAdmin,
+  assignRaToFloor
+);
 
 // CRUD
 router.post("/", upload.single("profileImage"), validateUserInput, createUser);

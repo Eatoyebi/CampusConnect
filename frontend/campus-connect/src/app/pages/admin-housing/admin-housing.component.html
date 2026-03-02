@@ -1,5 +1,5 @@
 <div class="page">
-    <h2>Admin Housing</h2>
+    <h2>Housing Assignment</h2>
   
     <div class="grid">
         <section class="card">
@@ -23,7 +23,8 @@
                   (mousedown)="selectStudent(s)"
                 >
                   <div class="name">{{ s.name }}</div>
-                  <div class="meta">{{ s.email }} <span *ngIf="s.studentProfile?.major">• {{ s.studentProfile?.major }}</span></div>
+                  <div class="meta">{{ s.email }} 
+                    <span *ngIf="s.studentProfile?.major">• {{ s.studentProfile?.major }}</span></div>
                 </button>
               </div>
             </div>
@@ -71,5 +72,60 @@
   
         <p class="status" *ngIf="statusMsg">{{ statusMsg }}</p>
       </section>
+
+      <section class="card">
+      <h3>3. Assign RA to Floor</h3>
+
+      <label class="label">Building</label>
+      <select class="select" [(ngModel)]="raSelectedBuildingId" (change)="onRaBuildingChange()">
+        <option value="">Select building</option>
+        <option *ngFor="let b of buildings" [value]="b._id">{{ b.name }}</option>
+      </select>
+
+      <label class="label">Floor</label>
+      <select
+        class="select"
+        [(ngModel)]="raSelectedFloorId"
+        (change)="onRaFloorChange()"
+        [disabled]="!raSelectedBuildingId"
+      >
+        <option value="">Select floor</option>
+        <option *ngFor="let f of raFloors" [value]="f._id">
+          {{ f.name || ("Floor " + f.number) }}
+        </option>
+      </select>
+
+      <label class="label">RA</label>
+      <select class="select" [(ngModel)]="selectedRaId" [disabled]="!raSelectedFloorId">
+        <option value="">Select RA</option>
+        <option *ngFor="let ra of ras" [value]="ra._id">
+          {{ ra.name }}
+          <span *ngIf="ra.email">({{ ra.email }})</span>
+        </option>
+      </select>
+
+      <button class="btn" (click)="assignRaToFloor()" [disabled]="!selectedRaId || !raSelectedFloorId">
+        Assign RA
+      </button>
+       <p class="status" *ngIf="raStatusMsg">{{ raStatusMsg }}</p>
+
+      <div style="margin-top: 16px;">
+        <div class="label" style="margin-bottom: 8px;">Current RAs on this floor</div>
+
+        <div class="muted" *ngIf="raAssignments.length === 0">
+          No assignments yet
+        </div>
+
+        <div *ngFor="let a of raAssignments" class="student-card" style="margin-top: 8px;">
+          <div class="student-title">
+            {{ a.raId?.name || "RA" }}
+          </div>
+          <div class="muted">{{ a.raId?.email || "" }}</div>
+          <button class="btn" style="margin-top: 10px;" (click)="removeRaAssignment(a._id)">
+            Remove
+          </button>
+        </div>
+      </div>
+    </section>
     </div>
   </div>

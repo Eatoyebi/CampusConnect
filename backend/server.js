@@ -24,6 +24,7 @@ import floorRoutes from "./src/routes/floorRoutes.js";
 import roomRoutes from "./src/routes/roomRoutes.js";
 import universityRoutes from "./src/routes/universityRoutes.js";
 import studentRoutes from "./src/routes/studentRoutes.js";
+import raAssignmentRoutes from "./src/routes/raAssignmentRoutes.js";
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use("/api/floors", floorRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/universities", universityRoutes);
 app.use("/api/students", studentRoutes);
+app.use("/api/ra-assignments", raAssignmentRoutes);
 
 // Base test route
 app.get("/", (req, res) => {

@@ -52,6 +52,23 @@ export class UserService {
     });
   }
 
+  getUsersByRole(role: NonNullable<User['role']>): Observable<User[]> {
+    const params = new HttpParams().set('role', role);
+
+    return this.http.get<User[]>(`${this.apiUrl}/admin/users`, {
+      params,
+      withCredentials: true,
+    });
+  }
+
+  assignRaToFloor(raId: string, building: string, floor: string): Observable<User> {
+    return this.http.put<User>(
+      `${this.apiUrl}/admin/users/${raId}/ra-assignment`,
+      { building, floor },
+      { withCredentials: true }
+    );
+  }
+  
   updateUser(id: string, body: FormData | Partial<User>): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${id}`, body, {
       withCredentials: true,

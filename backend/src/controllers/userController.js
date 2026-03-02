@@ -38,7 +38,7 @@ export const createUser = async (req, res) => {
 
     const profileImage = req.file ? req.file.filename : null;
 
-    const allowedRoles = ["student", "maintenance", "staff"];
+    const allowedRoles = ["student", "maintenance", "staff", "ra", "admin"];
 
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({ message: "Invalid role" });
@@ -281,5 +281,30 @@ export const updateMe = async (req, res) => {
       message: "Error updating your profile",
       error: error.message,
     });
+  }
+};
+
+export const assignRaToFloor = async (req, res) => {
+  try {
+    const { raId } = req.params;
+    const { building, floor } = req.body;
+
+    if (!building || !floor) {
+      return res.status(400).json({ message: 'building and floor are required' });
+    }
+
+    const user = await User.findById(raId);
+    if (!user) return res.status(404).json({ message: 'RA not found' });
+
+    if (String(user.role || '').toLowerCase() !== 'ra') {
+      return res.status(400).json({ message: 'Selected user is not an RA' });
+    }
+
+    user.raAssignment = { building: String(building).trim(), floor: String(floor).trim() };
+    await user.save();
+
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(500).json({ message: 'Failed to assign RA to floor', error: err.message });
   }
 };
