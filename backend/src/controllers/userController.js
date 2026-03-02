@@ -1,8 +1,7 @@
 import User from "../models/User.js";
-import StudentProfile from "../models/StudentUser.js";
 import MaintenanceUser from "../models/MaintenanceUser.js";
 import StaffUserModel from "../models/StaffUser.js";
-
+import StudentUser from "../models/StudentUser.js"; 
 /**
  * Helper: attach a usable URL for profile images
  */
@@ -51,14 +50,13 @@ export const createUser = async (req, res) => {
     if (role === "student") {
       const studentProfile = await StudentProfile.create({
         user: user._id,
-        mNumber,
-        major,
+        mNumber: String(mNumber ?? "").trim(),
+        major: String(major ?? "").trim(),
         graduationYear,
       });
-
+    
       user.studentProfile = studentProfile._id;
       await user.save();
-
     } else if (role === "maintenance") {
       const maintenanceProfile = await MaintenanceUser.create({
         user: user._id,
@@ -186,25 +184,40 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+
 export const searchUsers = async (req, res) => {
   try {
     const q = (req.query.q || "").trim();
+    if (!q) return res.json([]);
 
-    const filter = q
-      ? {
-          $or: [
-            { email: new RegExp(q, "i") },
-            { name: new RegExp(q, "i") },
-            { major: new RegExp(q, "i") },
-          ],
-        }
-      : {};
+    const users = await User.find({
+      $or: [
+        { name: { $regex: q, $options: "i" } },
+        { email: { $regex: q, $options: "i" } },
+      ],
+    })
+      .limit(20)
+      .lean();
 
-    const users = await User.find(filter).limit(25);
-    return res.json(users.map(u => attachProfileImageUrl(req, u)));
+    const userIds = users.map(u => u._id);
+
+    const studentProfiles = await StudentUser
+      .find({ user: { $in: userIds } })
+      .lean();
+
+    const profileMap = new Map(
+      studentProfiles.map(p => [String(p.user), p])
+    );
+
+    const merged = users.map(u => ({
+      ...u,
+      studentProfile: profileMap.get(String(u._id)) || null
+    }));
+
+    return res.json(merged);
   } catch (error) {
     console.error("searchUsers error:", error);
-    return res.status(500).json({ message: "Internal server error while searching users" });
+    return res.status(500).json({ message: "Search failed", error: error.message });
   }
 };
 

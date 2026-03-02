@@ -6,6 +6,7 @@ export type MeUser = {
   name?: string;
   email?: string;
   role?: 'student' | 'ra' | 'admin' | 'maintenance' | 'staff';
+  universityId?: string;
 
   housing?: {
     building?: string;
@@ -24,15 +25,18 @@ export class MeService {
   private baseUrl = 'http://localhost:5050';
 
   async getMe(): Promise<MeUser> {
-    const url = `${this.baseUrl}/api/users/me`;
+    const url = `${this.baseUrl}/api/auth/me`;
 
     const res = await fetch(url, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      credentials: 'include', // send HttpOnly cookie
+      headers: { 'Accept': 'application/json' },
+  
     });
 
     if (!res.ok) {
-      throw new Error(`GET /api/users/me failed (${res.status})`);
+
+      throw new Error(`GET /api/auth/me failed (${res.status})`);
     }
 
     return (await res.json()) as MeUser;

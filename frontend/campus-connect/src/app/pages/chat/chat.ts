@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { RouterModule } from '@angular/router';
 import { ChatService, ChatMsg } from '../../shared/chat.service';
 import { MeService, MeUser } from '../../shared/me.service';
 
@@ -17,10 +17,11 @@ type Room = {
   type: 'floor' | 'ra';
 };
 
+
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })

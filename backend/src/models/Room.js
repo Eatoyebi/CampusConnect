@@ -1,13 +1,34 @@
 import mongoose from "mongoose";
 
-const RoomSchema = new mongoose.Schema(
+const roomSchema = new mongoose.Schema(
   {
-    roomNumber: { type: String, required: true },
-    floorId: { type: mongoose.Schema.Types.ObjectId, ref: "Floor", required: true },
-    buildingId: { type: mongoose.Schema.Types.ObjectId, ref: "Building", required: true },
-    label: { type: String, default: "" },
+    buildingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Building",
+      required: true,
+    },
+    floorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Floor",
+      required: true,
+    },
+    roomNumber: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 20,
+    },
+    label: {
+      type: String,
+      trim: true,
+      maxlength: 120,
+      default: "",
+    },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Room", RoomSchema);
+// Prevent duplicates within a floor
+roomSchema.index({ floorId: 1, roomNumber: 1 }, { unique: true });
+
+export default mongoose.model("Room", roomSchema);

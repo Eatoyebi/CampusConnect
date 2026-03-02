@@ -10,39 +10,84 @@ export interface User {
   graduationYear?: string | number;
   bio?: string;
   profileImage?: string;
+  
 
-  role?: 'student' | 'ra' | 'admin';
+  role?: 'student' | 'ra' | 'admin' | 'maintenance' | 'staff';
+  universityId?: string;
+
   raAssignment?: {
     building?: string;
     floor?: string;
   };
+  studentProfile?: {
+    major?: string;
+    graduationYear?: string | number;
+    bio?: string;
+    roomId?: string;
+    housing?: {
+      building?: string;
+      roomNumber?: string;
+      ra?: string;
+    };
+  };
+
+  housing?: {
+    building?: string;
+    roomNumber?: string;
+    raId?: string;
+  };
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UserService {
   private apiUrl = 'http://localhost:5050/api/users';
+  private authUrl = 'http://localhost:5050/api/auth';
 
   constructor(private http: HttpClient) {}
 
+
   getUser(id: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+    return this.http.get<User>(`${this.apiUrl}/${id}`, {
+      withCredentials: true,
+    });
   }
 
   updateUser(id: string, body: FormData | Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${id}`, body);
+    return this.http.put<User>(`${this.apiUrl}/${id}`, body, {
+      withCredentials: true,
+    });
   }
+
 
   searchUsersAdmin(query: string): Observable<User[]> {
     const params = new HttpParams().set('q', query.trim());
-    return this.http.get<User[]>(`${this.apiUrl}/admin/users`, { params });
+    return this.http.get<User[]>(`${this.apiUrl}/admin/users`, {
+      params,
+      withCredentials: true,
+    });
   }
 
+
   getUserAdmin(id: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/admin/users/${id}`);
+    return this.http.get<User>(`${this.apiUrl}/admin/users/${id}`, {
+      withCredentials: true,
+    });
   }
+
+
   getCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/me`);
+    return this.http.get<User>(`${this.authUrl}/me`, {
+      withCredentials: true,
+    });
   }
+
+  searchUsers(q: string): Observable<User[]> {
+    const params = new HttpParams().set('q', q.trim());
+  
+    return this.http.get<User[]>(`${this.apiUrl}/search`, {
+      params,
+      withCredentials: true,
+    });
+
+}
 }
