@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import MaintenanceTicket from "../models/MaintenanceTicketModel.js";
+import MaintenanceTicket from "../models/maintenanceTicketModel.js";
 
 export const createMaintenanceTicket = async (req, res) => {
   // results from Express Validator
