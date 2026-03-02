@@ -2,16 +2,11 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    // University scoping
-    universityId: { type: String, required: true, index: true }, // e.g., "UC"
-
     name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
 
-    // email is still required, but uniqueness is enforced per-university via index below
-    email: { type: String, required: true, lowercase: true, trim: true },
-
-    // Auth (store only hash, never plaintext)
-    passwordHash: { type: String, required: true },
+    // auth (optional for now, but future proof)
+    password: { type: String },
 
     role: {
       type: String,
@@ -20,27 +15,20 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
-    // optional security flags
-    isActive: { type: Boolean, default: true },
-    lastLoginAt: { type: Date },
-
-    // --- Profile references ---
     studentProfile: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "StudentProfile",
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "StudentProfile",
     },
 
     maintenanceProfile: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "MaintenanceProfile",
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "MaintenanceProfile",
+  },
 
     staffProfile: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "StaffProfile",
-    },
-
-    // --- Existing user fields---
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "StaffProfile",
+  },
     major: { type: String },
     graduationYear: { type: String },
     bio: { type: String },
@@ -60,8 +48,6 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Uniqueness per university
-UserSchema.index({ universityId: 1, email: 1 }, { unique: true });
-
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
+
 export default User;

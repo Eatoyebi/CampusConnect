@@ -46,5 +46,3 @@ backend/uploads/
 # Lerna / Workspace
 lerna-debug.log
 pnpm-lock.yaml
-
-cookies.txt
