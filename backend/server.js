@@ -31,20 +31,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || process.env.BACKEND_PORT || 5050;
+const PORT = process.env.BACKEND_PORT || 5050;
 
 // Middleware
 app.use(cookieParser());
 app.use(express.json());
 
-const allowedOrigins = [
-  process.env.FRONTEND_ORIGIN,
-  "http://localhost:4200",
-].filter(Boolean);
-
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -87,7 +82,7 @@ const server = createServer(app);
 
 const io = new SocketIOServer(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: [process.env.FRONTEND_ORIGIN || "http://localhost:4200"],
     methods: ["GET", "POST"],
     credentials: true,
   },
