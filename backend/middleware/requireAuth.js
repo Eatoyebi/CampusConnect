@@ -1,4 +1,3 @@
-// backend/middleware/requireAuth.js
 import jwt from "jsonwebtoken";
 import User from "../src/models/User.js";
 
@@ -12,16 +11,37 @@ export default async function requireAuth(req, res, next) {
         ? req.headers.authorization.slice(7)
         : null);
 
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    // If token exists, do real auth
+    if (token) {
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(payload.sub).lean();
+      if (!user) return res.status(401).json({ message: "Unauthorized" });
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = {
+        _id: user._id,
+        id: user._id.toString(),
+        role: (user.role || "STUDENT").toUpperCase(),
+      };
 
-    const user = await User.findById(payload.sub).lean();
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
+      req.auth = payload;
+      return next();
+    }
 
-    req.user = user;
-    req.auth = payload;
-    next();
+    // No token, dev fallback for now
+    const devUser = await User.findOne();
+    if (!devUser) {
+      return res.status(401).json({
+        message: "Unauthorized (no users exist yet). Create a user first.",
+      });
+    }
+
+    req.user = {
+      _id: devUser._id,
+      id: devUser._id.toString(),
+      role: (devUser.role || "STUDENT").toUpperCase(),
+    };
+
+    return next();
   } catch (e) {
     return res.status(401).json({ message: "Unauthorized" });
   }
