@@ -11,7 +11,7 @@
     "dev": "lerna run dev --parallel --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
-    "start": "concurrently \"npm run dev -w @campus/backend\" \"npm run start -w @campus/frontend\""
+    "start": "npm run start -w @campus/backend"
   },
   "devDependencies": {
     "@types/socket.io-client": "^1.4.36",
