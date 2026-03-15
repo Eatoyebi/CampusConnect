@@ -16,7 +16,13 @@ export interface Ticket {
     status: Status;
     priority: 'Low' | 'Medium' | "High";
 
-    assignedTo?: string;
+    emegerncy: boolean;
+
+    assignedTo?:{
+    _id: string;
+    name: string;
+
+    } 
     createdAt: Date;
     updatedAt: Date;
 }

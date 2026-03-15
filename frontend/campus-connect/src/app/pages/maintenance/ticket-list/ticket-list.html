@@ -1,67 +1,103 @@
-<div class="ticket-list-container">
+<div class="ticket-dashboard">
+    <div class="dashboard-header">
+        <div class="header-content">
+            <h1>Maintenance Tickets</h1>
+            <p class="subtitle">Manage and track maintenance requests</p>
+        </div>
+    </div>
 
-<h2> Current Maintenance Tickets</h2>
 
-<div class="form-filter">
-    <input 
-    class="form-control"
-    placeholder="Search description..."
-    [(ngModel)]="searchText"
-     />
 
-     <label for="statusFilterSelect">Filter by Status:</label>
-     <select id="statusFilterSelect" class="form-slect" [(ngModel)]="statusFilter">
-        <option value="">All Status</option>
-        <option value="Pending">Pending</option>
-        <option value="Assigned">Assigned</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Completed">Completed</option>
-     </select>
+<div class="status-tabs">
+    <button
+        class="tab-btn"
+        [class.active] ="statusFilter === ''"
+        (click)="statusFilter = '' ; applyFilters()">
+        All <span class="status-badge"> {{ getStatusCount() }}</span>
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="statusFilter === 'Pending'"
+      (click)="statusFilter = 'Pending'; applyFilters()">
+      Pending <span class="status-badge">{{ getStatusCount('Pending') }}</span>
+    </button>
+    <button
+    class ="tab-btn"
+    [class.active]="statusFilter ==='Assigned'"
+    (click)="statusFilter = 'Assigned'; applyFilters()">
+    Assigned <span class="status-badge"> {{getStatusCount('Assigned')}}</span>
+    </button>
+    <button
+    class="tab-btn"
+    [class.active]="statusFilter === 'In Progress'"
+    (click)="statusFilter = 'In Progress'; applyFilters()">
+    In Progress <span class="status-badge"> {{ getStatusCount('In Progress') }}</span>
+    </button>
+    <button
+    class="tab-btn"
+    [class.active]="statusFilter === 'Completed'"
+    (click)="statusFilter = 'Completed'; applyFilters()">
+    Completed <span class="status-badge"> {{ getStatusCount('Completed') }}</span>
+    </button>
 </div>
 
-<table class="ticket-table">
-    <thead class="">
-        <tr>
-            <th>Ticket ID # |</th>
-            <th>Location |</th>
-            <th>Priority |</th>
-            <th>Status |</th>
-            <th>Assigned To |</th>
-            <th>Date |</th>
-        </tr>
-    </thead>
-
-<tbody>
-    <tr *ngFor=" let t of filteredTickets()">
-        <td>{{ t._id.slice(-5) }}</td>
-        <td>{{ t.location }}</td>
-        <td>{{ t.priority }}</td>
-        <td>{{ t.status }}</td>
-        <td>{{ t.assignedTo }}</td>
-        <td>{{ t.date }}</td>
-
-
-        <td>
-          {{ t.assignedTo?.name || 'Unassigned' }}
-        </td>
-
-        <td>
-          {{ t.createdAt}}
-        </td>
-
-        <td>
-          <a
-            class="btn btn-sm btn-outline-primary"
-            [routerLink]="['/tickets', t._id]">
-            View
-          </a>
-        </td>
-    </tr>
-
-</tbody>
-
-</table>
-
+<div class="filter-bar">
+    <div class="search-container">
+        <input
+        type="text"
+        class="search-input"
+        placeholder="Search ticket by description"
+        [(ngModel)]="searchText"
+        (ngModelChange)="applyFilters()">
+    <svg class="search-icon" width="10" height="10" viewBox="0 0 20 20" fill="none">
+        <path d="M9 17a8 8 0 100-16 8 8 0 000 16zm6-2l4 4" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
 </div>
 
 
+<div class="table-container">
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th class="col-ticket">Ticket #</th>
+                <th class="col-location">Location</th>
+                <th class="col-description">Description</th>
+                <th class="col-status">Status</th>
+                <th class="col-priority">Priority</th>
+                <th class="col-assigned">Assigned To</th>
+                <th class="col-date">Date Created</th>
+            </tr>    
+        </thead> 
+        <tbody>
+            <tr *ngFor="let t of filteredTickets" class="table-row">
+                <td class="col-ticket">
+                    <a [routerLink]="['/tickets', t._id]" class="ticket-link">
+                    <span class="ticket-id">#{{ t._id.slice(-5).toUpperCase() }}</span>
+                </a>
+                </td>
+                <td class="col-location">{{ t.buildingId }}</td>
+                <td class="col-description"> {{ t.description }}</td>
+                <td class="col-status">
+                <span [class]="'status-badge status-' + t.status.toLowerCase().replace(' ', '-')">
+                    {{ t.status }}
+                </span>
+                </td>
+                <td class="col-priority">
+                    <span [class]="'priority-bade priority-' + t.priority.toLowerCase()">
+                    {{ t.priority }}
+                    </span>
+                </td>
+                <td class="col-assigned">
+                    <span class="assignee">{{ t.assignedTo?.name || 'Unassigned' }}</span>
+                </td>
+                <td class="col-date"> {{t.createdAt | date: 'short'}} </td>
+            </tr>
+        </tbody>   
+    </table>
+
+    <div *ngIf="filteredTickets.length === 0" class="empty-state">
+      <p>No tickets found</p>
+    </div>
+</div>
+</div>

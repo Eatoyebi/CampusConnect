@@ -1,29 +1,31 @@
 import {validationResult} from 'express-validator';
-import maintenanceTicket from './models/MaintenanceTicketModel.js';
+import MaintenanceTicket from '../models/maintenanceTicketModel.js'
+import User from '../models/User.js'
 
-export const createRequest = async (req, res) => {
+
+export const createTicket = async (req, res) => {
     try {
         const studentId = req.user.id;
 
         const student = await User.findById(studentId);
         if (!student) return res.status(404).json({ message: 'Student not found' });
 
-        const request = await MaintenanceREquest.create({
+        const request = await MaintenanceTicket.create({
         student: studentId,
-
-        universityId: student.universityId,
+        universityId: student.universityId || 'N/A',
         
-        buildingId: student.housing.building,
-        floorId: student.housing.floor,
-        roomId: student.housing.roomId,
-
+        buildingId: student.studentInfo?.housing?.building || 'N/A',
+        floorId: student.studentInfo?.housing?.floor || 'N/A',
+        roomId: student.studentInfo?.housing?.roomId || 'N/A',
+        location: req.body.location,
         description: req.body.description,
-        castegory: req.body.category,
+        category: req.body.category,
         priority: req.body.priority,
-        emegerncy: req.body.emergency
+        emergency: req.body.emergency
     });
-    return res.status(201).json(request);
+     res.status(201).json(request);
 } catch(err) {
+    console.error('createTicket error:', err);
     res.status(500).json({ message: 'Server error while creating maintenance request' });
     }
 };
@@ -33,40 +35,52 @@ export const createRequest = async (req, res) => {
 
 //admin view
 export const getAllMaintenanceTickets = async (req, res) => {
-    const tickets = await MaintenanceRequest.find();
-    return res.json(tickets);
+    const tickets = await MaintenanceTicket.find()
+    .populate('student', 'name email')
+    .populate('assignedTo', 'name email')
+
+    res.json(tickets);
 };
 
 //student view of their own maintenance requests
-export const getMyRequests = async (req, res) => {
-    const tickets = await MaintenanceRequest.find({
+export const getMyTickets = async (req, res) => {
+    const tickets = await MaintenanceTicket.find({
         student: req.user.id
-    });
-    return res.json(tickets);
+    })
+    .populate('assignedTo', 'name email');
+     res.json(tickets);
 };
 //ra view of maintenance requests for their assigned building and floor
-export const getRaRequests = async (req, res) => {
-    const {buildingId, floorId} = req.user.raRassignment;
+export const getRaTickets = async (req, res) => {
+    const {buildingId, floorId} = req.user.raInfo;
 
-    const tickets = await MaintenanceRequest.find({
+    const tickets = await MaintenanceTicket.find({
         buildingId: buildingId,
         floorId: floorId
-    });
-    return res.json(tickets);
+    })
+    .populate('student', 'name')
+    .populate('assignedTo', 'name');
+
+     res.json(tickets);
 }
 
 
-export const getAssignedRequests = async (req, res) => {
-    const tickets = await MaintenanceRequest.find({
+export const getAssignedTickets = async (req, res) => {
+    const tickets = await MaintenanceTicket.find({
         assignedTo: req.user.id
-    });
-    return res.json(tickets);
+    })
+    .populate('student', 'name');
+     res.json(tickets);
 }
 
 export const updateTicketStatus = async (req, res) => {
     const { status } = req.body;
 
-    const ticket = await MaintenanceRequest.findById(req.params.id);
+    const ticket = await MaintenanceTicket.findById(req.params.id);
+
+    if (!ticket) {
+        return res.status(404).json({ message: 'ticket not found'});
+    }
 
     const allowed = {
         maintenance: [ 'Assigned', 'In Progress', 'Completed', 'Closed' ],
@@ -76,11 +90,13 @@ export const updateTicketStatus = async (req, res) => {
 
 
     if(!allowed[req.user.role]?.includes(status)) {
-        return res.status(403).json('unauthorized role');
+        return res.status(403).json({ message: 'unauthorized role' });
     }
 
     ticket.status = status;
     await ticket.save();
+
+    const populated = await ticket.populate('assignedTo', 'name')
 
     res.json(ticket);
 }

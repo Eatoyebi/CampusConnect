@@ -8,12 +8,12 @@ import { Ticket } from '../../models/ticket.model';
 })
 
 export class TicketService {
-    private baseUrl = '/api/maintenance';
+    private baseUrl = '/api/maintenance-tickets';
 
     constructor(private http: HttpClient) {}
 
-    createTicket(formData: FormData): Observable<any> {
-        return this.http.post(this.baseUrl, formData);
+    createTicket(data: any): Observable<any> {
+        return this.http.post(`${this.baseUrl}/create`, data);
     }
 
     // read ticket functions

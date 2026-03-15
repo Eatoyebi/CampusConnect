@@ -1,28 +1,29 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { authorize } from '../middleware/requiredAuth.js';
-import { authenticate } from '../middleware/requireRole.js';
+import requireAuth  from '../../middleware/requireAuth.js';
+import { requireRole } from  '../../middleware/requireRole.js';
 import {
-    createRequest,
-    getMyRequests,
-    getRaRequests,
-    getAssignedRequests,
-    getAllMaintenanceTickets
+    createTicket,
+    getMyTickets,
+    getRaTickets,
+    getAssignedTickets,
+    getAllMaintenanceTickets,
+    updateTicketStatus
 } from '../controllers/maintenanceTicketController.js';
 
 const router = express.Router();
 
-router.post('/create', authorize(['student']), createRequest);
+router.post('/create', requireAuth, requireRole('student'), createTicket);
 
-router.get('/my-requests', authorize(['student']), getMyRequests);
+router.get('/my-tickets', requireAuth, requireRole('student'), getMyTickets);
 
-router.get('/ra-requests', authorize(['ra']),getRaRequests);
+router.get('/ra-tickets', requireAuth,requireRole('ra'), getRaTickets);
 
-router.get('/assigned-requests', authorize(['maintenance']),getAssignedRequests);
+router.get('/assigned-tickets', requireAuth,requireRole('maintenance'), getAssignedTickets);
 
-router.get('/all', authorize(['admin']),getAllMaintenanceTickets);
+router.get('/all', requireAuth, requireRole('admin'), getAllMaintenanceTickets);
 
-router.patch('/:id/status', authorize(['ra', 'maintenance']), updateTicketStatus);
+router.patch('/:id/status', requireAuth, requireRole('ra', 'maintenance'), updateTicketStatus);
 
 
 
