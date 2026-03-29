@@ -145,7 +145,7 @@ io.on("connection", (socket) => {
 
 const frontendDistPath = path.resolve(
   __dirname,
-  "../frontend/campus-connect/dist/campus-connect/browser"
+  "../frontend/campus-connect/dist/campus-connect"
 );
 
 app.use(express.static(frontendDistPath));
