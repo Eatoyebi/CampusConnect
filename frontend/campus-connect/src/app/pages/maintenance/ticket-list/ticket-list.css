@@ -195,8 +195,8 @@
 .ticket-id {
     display: inline-block;
     font-weight: 600;
-    color: var(--primary-color);
     font-size: 13px; 
+    text-decoration: underline;
 }
 
 .ticket-link {
@@ -216,26 +216,41 @@
 .status-pending {
     background: #FEE2E2;
     color: #991B1B;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
 }
 
 .status-assigned {
     background: #FEF3C7;
     color: #92400E;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
 }
 
 .status-in-progress {
     background: #DBEAFE;
     color: #1E40AF;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
 }
 
 .status-completed {
     background: #D1FAE5;
     color: #065F46;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
 }
 
 .status-closed {
     background: #E5E7EB;
     color: #374151;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
 }
 
 .priority-badge {

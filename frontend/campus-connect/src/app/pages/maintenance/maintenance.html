@@ -1,6 +1,6 @@
 <h2>New Maintenance Request</h2>
 
-<div class="button-container">
+<div class="button-container ticket-list-button">
   <a routerLink="/maintenance/ticket-list">
     <button type="button">View Tickets</button>
   </a>
@@ -10,22 +10,7 @@
 
   <form (ngSubmit)="submitRequest(maintenanceForm)" #maintenanceForm="ngForm">
 
-    <div class="form-group">
-      <label for="maintenance-description">Description</label>
-      <textarea
-        id="maintenance-description"
-        name="description"
-        placeholder="Describe the maintenance issue"
-        [(ngModel)]="newRequest.description"
-        required
-        #description="ngModel"
-        class="form-control">
-      </textarea>
 
-      <small *ngIf="description.invalid && description.touched" class="error">
-        Description is required
-      </small>
-    </div>
 
      <div class="form-group">
       <label for="maintenance-location">Issue Location</label>
@@ -75,13 +60,29 @@
         [(ngModel)]="newRequest.priority"
         class="form-control">
 
-        <option value="">Select Priority</option>
+        <option value="">Priority Level</option>
         <option value="Low">Low</option>
         <option value="Medium" selected>Medium</option>
         <option value="High">High</option>
       </select>
     </div>
 
+        <div class="form-group">
+      <label for="maintenance-description">Description</label>
+      <textarea
+        id="maintenance-description"
+        name="description"
+        placeholder="Describe the maintenance issue"
+        [(ngModel)]="newRequest.description"
+        required
+        #description="ngModel"
+        class="form-control">
+      </textarea>
+
+      <small *ngIf="description.invalid && description.touched" class="error">
+        Description is required
+      </small>
+    </div>
 
     <div class="form-group checkbox">
       <label>

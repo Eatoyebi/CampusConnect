@@ -7,7 +7,17 @@
 h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-weight: normal;
+    background-color: pink;
+    padding: 10px;
+    border-radius: 8px;
 }
+
+.ticket-list-button {
+    margin-bottom: 30px;
+    font-size: 1.2rem;
+}
+
 .maintenance-form-container h2, h3 {
     text-align: center;
     margin-bottom: 15px;
