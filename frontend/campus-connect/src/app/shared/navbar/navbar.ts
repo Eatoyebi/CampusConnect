@@ -18,14 +18,8 @@ export class Navbar implements OnInit {
   user$ = this.auth.user$;
 
 ngOnInit(): void {
-    this.auth.bootstrap().subscribe({
-      next: () => {},
-      error: () => {
-    
-      }
-    });
-  }
- 
+    this.auth.bootstrap().subscribe();
+}
 
    get role(): Role | null {
     return this.auth.getUserSnapshot()?.role ?? null;
