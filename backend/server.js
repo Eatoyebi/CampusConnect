@@ -143,15 +143,23 @@ io.on("connection", (socket) => {
   });
 });
 
-const frontendDistPath = path.resolve(
-  __dirname,
-  "../frontend/campus-connect/dist/campus-connect"
-);
+// Use path.join for better compatibility across different environments
+const frontendDistPath = path.join(__dirname, "..", "frontend", "campus-connect", "dist", "campus-connect");
 
+// Serve static files from the Angular app
 app.use(express.static(frontendDistPath));
 
+// The "catch-all" handler: for any request that doesn't
+// match one above, send back Angular's index.html file.
 app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendDistPath, "index.html"));
+  const indexPath = path.join(frontendDistPath, "index.html");
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      // This will help us see the EXACT path it's failing on in the Render logs
+      console.error("Error sending index.html:", err);
+      res.status(500).send("Frontend build not found. Please run build command.");
+    }
+  });
 });
 
 server.listen(PORT, "0.0.0.0", () => {
