@@ -144,7 +144,16 @@ io.on("connection", (socket) => {
 });
 
 // Use path.join for better compatibility across different environments
-const frontendDistPath = path.join(__dirname, "..", "frontend", "campus-connect", "dist", "campus-connect");
+const path = require('path');
+
+// This matches the exact path Render is looking for
+const frontendPath = path.join(__dirname, '../frontend/campus-connect/dist/campus-connect');
+
+app.use(express.static(frontendPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 // Serve static files from the Angular app
 app.use(express.static(frontendDistPath));
