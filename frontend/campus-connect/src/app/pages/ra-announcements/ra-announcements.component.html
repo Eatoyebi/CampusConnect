@@ -24,3 +24,32 @@
     <div class="err" *ngIf="error()">{{ error() }}</div>
   </form>
 </div>
+<hr class="divider" />
+
+<div class="recent-header">
+  <h3 class="recent-title">Recent Announcements</h3>
+  <span class="recent-count">{{ items.length }} total</span>
+</div>
+
+<div *ngIf="items.length === 0" class="empty-state">
+  <div class="empty-title">No announcements yet</div>
+  <div class="empty-sub">Post one above and it will show up here.</div>
+</div>
+
+<div class="announcement-grid" *ngIf="items.length > 0">
+  <div *ngFor="let a of items" class="announcement-card">
+    <div class="card-top">
+      <div class="meta">
+        <span class="pill">{{ a.category | titlecase }}</span>
+        <span class="date">{{ a.createdAt | date:'short' }}</span>
+      </div>
+
+      <button class="icon-btn danger" type="button" (click)="delete(a.id)" aria-label="Delete announcement">
+        ✕
+      </button>
+    </div>
+
+    <div class="card-title">{{ a.title }}</div>
+    <div class="card-body">{{ a.message }}</div>
+  </div>
+</div>

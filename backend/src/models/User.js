@@ -2,41 +2,50 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const UserSchema = new mongoose.Schema(
-{
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
+  {
+    // University scoping
+    universityId: { type: String, required: true, index: true }, // e.g., "UC"
 
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
+    name: { type: String, required: true },
 
-  password: {
-    type: String,
-    required: true
-  },
+    // email is still required, but uniqueness is enforced per-university via index below
+    email: { type: String, required: true, lowercase: true, trim: true },
 
-  role: {
-    type: String,
-    enum: ["student", "ra", "maintenance", "admin"],
-    default: "student",
-    required: true
-  },
+    // Auth (store only hash, never plaintext)
+    passwordHash: { type: String, required: true },
 
-  studentInfo: {
-    mNumber: {
+    role: {
       type: String,
-      match: /^M\d{8}$/
+      enum: ["student", "ra", "admin", "maintenance"],
+      default: "student",
+      required: true,
     },
 
-    major: String,
-    graduationYear: String,
+    // optional security flags
+    isActive: { type: Boolean, default: true },
+    lastLoginAt: { type: Date },
+
+    // --- Profile references ---
+    studentProfile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "StudentProfile",
+    },
+
+    maintenanceProfile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MaintenanceProfile",
+    },
+
+    staffProfile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "StaffProfile",
+    },
+
+    // --- Existing user fields---
+    major: { type: String },
+    graduationYear: { type: String },
+    bio: { type: String },
+    profileImage: { type: String },
 
     housing: {
       building: String,
@@ -72,12 +81,8 @@ const UserSchema = new mongoose.Schema(
 }
 );
 
-UserSchema.pre("save", async function(next) {
-  if (!this.isModified("password")) return next();
+// Uniqueness per university
+UserSchema.index({ universityId: 1, email: 1 }, { unique: true });
 
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
-
-
-export default mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
+export default User;

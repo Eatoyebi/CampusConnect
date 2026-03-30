@@ -1,0 +1,99 @@
+/* Page wrapper */
+.policy-page {
+    max-width: 1100px;
+    margin: 42px auto;
+    padding: 0 18px;
+  }
+  
+  /* Card */
+  .policy-card {
+    margin: 0 auto;
+    max-width: 920px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 14px 34px rgba(0,0,0,.08);
+    padding: 34px 40px;
+    border: 1px solid rgba(0,0,0,.03);
+  }
+  
+  /* Header text */
+  .kicker {
+    color: #e20d2b;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 10px;
+    font-size: 16px;
+  }
+  
+  .title {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 34px;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin: 0 0 22px;
+    font-size: 16px;
+  }
+  
+  /* Content box */
+  .content {
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.02);
+    border-radius: 14px;
+    padding: 18px 18px;
+  }
+  
+  .content p {
+    margin: 8px 0;
+    line-height: 1.55;
+    font-size: 15px;
+    color: #111;
+  }
+  
+  /* Section headings */
+  .section-title {
+    margin: 18px 0 8px;
+    font-size: 16px;
+    font-weight: 900;
+  }
+  
+  /* Divider */
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+    margin: 18px 0 14px;
+  }
+  
+  /* Contact callout */
+  .contact {
+    margin-top: 8px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(226, 13, 43, 0.06);
+    border-left: 4px solid #e20d2b;
+  }
+  
+  .contact a {
+    color: #e20d2b;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  
+  .contact a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Mobile */
+  @media (max-width: 720px) {
+    .policy-card {
+      padding: 26px 18px;
+    }
+    .title {
+      font-size: 28px;
+    }
+  }
+  

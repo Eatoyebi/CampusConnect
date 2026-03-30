@@ -11,7 +11,7 @@
     "dev": "lerna run dev --parallel --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
-    "start": "concurrently \"npm run dev -w @campus/backend\" \"npm run start -w @campus/frontend\""
+    "start": "npm run start -w @campus/backend"
   },
   "devDependencies": {
     "@types/socket.io-client": "^1.4.36",
@@ -20,6 +20,8 @@
     "nodemon": "^3.0.1"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cookie-parser": "^1.4.7",
     "multer": "^2.0.2"
   }
 }

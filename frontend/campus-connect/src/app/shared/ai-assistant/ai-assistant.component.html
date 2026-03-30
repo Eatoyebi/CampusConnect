@@ -1,0 +1,40 @@
+<button class="ai-fab" (click)="toggle()" aria-label="Open CampusConnect Assistant">
+  <img class="ai-fab-icon" src="/AI-icon.svg" alt="AI" />
+</button>
+
+<div class="ai-panel" *ngIf="open">
+  <div class="ai-header">
+    <span>CampusConnect Assistant</span>
+    <button class="ai-close" (click)="toggle()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="ai-body" #scrollContainer>
+    <div class="ai-hint">Ask me how to use the app.</div>
+
+    <div class="ai-messages">
+      <div
+        *ngFor="let m of messages"
+        class="ai-msg"
+        [ngClass]="m.sender"
+      >
+        {{ m.text }}
+      </div>
+    </div>
+
+    <div class="ai-error" *ngIf="error">
+      {{ error }}
+    </div>
+  </div>
+
+  <div class="ai-footer">
+    <input
+      [(ngModel)]="input"
+      placeholder="Type your question..."
+      (keydown.enter)="send()"
+      [disabled]="loading"
+    />
+    <button (click)="send()" [disabled]="loading">
+      {{ loading ? '...' : 'Send' }}
+    </button>
+  </div>
+</div>

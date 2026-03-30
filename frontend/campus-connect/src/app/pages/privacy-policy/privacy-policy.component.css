@@ -1,0 +1,159 @@
+.policy-page {
+    max-width: 1100px;
+    margin: 42px auto;
+    padding: 0 18px;
+  }
+  
+  .policy-card {
+    margin: 0 auto;
+    max-width: 920px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 14px 34px rgba(0,0,0,.08);
+    padding: 34px 40px;
+    border: 1px solid rgba(0,0,0,.03);
+  }
+  
+  .kicker {
+    color: #e20d2b;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 10px;
+    font-size: 16px;
+  }
+  
+  .title {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 34px;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin: 0 0 18px;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+  
+  .meta {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    color: #666;
+    font-size: 13px;
+  }
+  
+  .meta span {
+    padding: 6px 10px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.02);
+  }
+  
+  /* TOC */
+  .toc {
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 16px;
+    background: rgba(0,0,0,0.02);
+    margin: 0 0 18px;
+  }
+  
+  .toc-title {
+    font-weight: 800;
+    margin: 0 0 10px;
+    font-size: 14px;
+  }
+  
+  .toc a {
+    color: #e20d2b;
+    text-decoration: none;
+    font-weight: 700;
+  }
+  
+  .toc a:hover {
+    text-decoration: underline;
+  }
+  
+  .toc ol {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+  }
+  
+  /* Content typography */
+  .content h2 {
+    margin: 22px 0 10px;
+    font-size: 18px;
+    font-weight: 900;
+  }
+  
+  .content h3 {
+    margin: 12px 0 6px;
+    font-size: 15px;
+    font-weight: 900;
+  }
+  
+  .content p,
+  .content li {
+    font-size: 15px;
+    line-height: 1.55;
+    color: #111;
+  }
+  
+  .content ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 6px;
+  }
+  
+  .note {
+    border-left: 4px solid #e20d2b;
+    padding: 10px 12px;
+    margin: 12px 0 0;
+    background: rgba(226, 13, 43, 0.06);
+    border-radius: 10px;
+  }
+  
+  .divider {
+    border: none;
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+    margin: 18px 0 14px;
+  }
+  
+  /* Bottom links */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  
+  .link {
+    color: #e20d2b;
+    text-decoration: none;
+    font-weight: 800;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 720px) {
+    .policy-card {
+      padding: 26px 18px;
+    }
+    .title {
+      font-size: 28px;
+    }
+  }
+  
