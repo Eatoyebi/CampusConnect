@@ -143,28 +143,16 @@ io.on("connection", (socket) => {
   });
 });
 
-// Use path.join for better compatibility across different environments
-const path = require('path');
-
-// This matches the exact path Render is looking for
+// 1. Define the correct path to your Angular build
 const frontendPath = path.join(__dirname, '../frontend/campus-connect/dist/campus-connect');
 
+// 2. Serve the static files from that directory
 app.use(express.static(frontendPath));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
-
-// Serve static files from the Angular app
-app.use(express.static(frontendDistPath));
-
-// The "catch-all" handler: for any request that doesn't
-// match one above, send back Angular's index.html file.
+// 3. The "catch-all" handler: Send back index.html for any other request
 app.get("*", (req, res) => {
-  const indexPath = path.join(frontendDistPath, "index.html");
-  res.sendFile(indexPath, (err) => {
+  res.sendFile(path.join(frontendPath, "index.html"), (err) => {
     if (err) {
-      // This will help us see the EXACT path it's failing on in the Render logs
       console.error("Error sending index.html:", err);
       res.status(500).send("Frontend build not found. Please run build command.");
     }
