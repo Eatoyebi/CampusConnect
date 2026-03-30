@@ -143,20 +143,12 @@ io.on("connection", (socket) => {
   });
 });
 
-// 1. Define the correct path to your Angular build
-const frontendPath = path.join(__dirname, '../frontend/campus-connect/dist/campus-connect');
+const frontendPath = path.join(__dirname, '../frontend/campus-connect/dist/campus-connect/browser');
 
-// 2. Serve the static files from that directory
 app.use(express.static(frontendPath));
 
-// 3. The "catch-all" handler: Send back index.html for any other request
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"), (err) => {
-    if (err) {
-      console.error("Error sending index.html:", err);
-      res.status(500).send("Frontend build not found. Please run build command.");
-    }
-  });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 server.listen(PORT, "0.0.0.0", () => {
