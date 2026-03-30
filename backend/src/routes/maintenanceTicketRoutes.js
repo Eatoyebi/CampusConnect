@@ -8,7 +8,9 @@ import {
     getRaTickets,
     getAssignedTickets,
     getAllMaintenanceTickets,
-    updateTicketStatus
+    updateTicketStatus,
+    assignTicketToSelf,
+    getUnassignedTickets
 } from '../controllers/maintenanceTicketController.js';
 
 const router = express.Router();
@@ -24,6 +26,15 @@ router.get('/assigned-tickets', requireAuth,requireRole('maintenance'), getAssig
 router.get('/all', requireAuth, requireRole('admin'), getAllMaintenanceTickets);
 
 router.patch('/:id/status', requireAuth, requireRole('ra', 'maintenance'), updateTicketStatus);
+
+router.patch('/:id/assign', requireAuth, requireRole('maintenance'), assignTicketToSelf);
+
+router.get(
+    '/unassigned',
+    requireAuth,
+    requireRole('ra', 'maintenance'),
+    getUnassignedTickets
+)
 
 
 

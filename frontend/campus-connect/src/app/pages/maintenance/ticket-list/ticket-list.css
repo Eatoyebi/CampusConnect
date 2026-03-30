@@ -219,6 +219,7 @@
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
+    font-weight: 600;
 }
 
 .status-assigned {
@@ -227,6 +228,7 @@
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
+    font-weight: 600;
 }
 
 .status-in-progress {
@@ -235,6 +237,7 @@
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
+    font-weight: 600;
 }
 
 .status-completed {
@@ -243,6 +246,7 @@
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
+    font-weight: 600;
 }
 
 .status-closed {
@@ -251,6 +255,7 @@
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
+    font-weight: 600;
 }
 
 .priority-badge {
@@ -268,7 +273,6 @@
     border-radius: 12px;
     font-size: 12px;
     font-weight: 600;
-
 }
 
 .priority-medium {

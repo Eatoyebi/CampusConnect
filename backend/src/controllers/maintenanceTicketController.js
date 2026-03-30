@@ -64,12 +64,24 @@ export const getRaTickets = async (req, res) => {
      res.json(tickets);
 }
 
+export const getUnassignedTickets = async (req, res) => {
+    const tickets = await MaintenanceTicket.find({
+        assignedTo: null
+    })
+    .populate('student', 'name')
+    .sort({ emergency: -1, priority: -1, createdAt: 1 });
+
+
+    res.json(tickets);
+}
 
 export const getAssignedTickets = async (req, res) => {
     const tickets = await MaintenanceTicket.find({
         assignedTo: req.user.id
     })
-    .populate('student', 'name');
+    .populate('student', 'name')
+    .sort({ emergency: -1, priority: -1, createdAt: 1 });
+
      res.json(tickets);
 }
 
@@ -99,4 +111,30 @@ export const updateTicketStatus = async (req, res) => {
     const populated = await ticket.populate('assignedTo', 'name')
 
     res.json(ticket);
+}
+
+export const assignTicketToSelf = async (req, res) => {
+    try {
+        const ticket = await MaintenanceTicket.findById(req.params.id);
+
+    if (!ticket){
+        return res.status(404).json({ message: 'Ticket not found'})
+    }
+
+if(ticket.assignedTo) {
+    return res.status(400).json({ message: 'Ticket already assigned'})
+}
+
+ticket.asssignedTo = req.user.id;
+ticket.status = 'Assigned';
+
+await ticket.save();
+
+const populated = await ticket.populate('assignedTo', 'name'
+)
+
+res.json(populated);
+    } catch (err) {
+        res.status(500).json({ message: 'Error assigning ticket'})
+    }
 }

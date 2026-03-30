@@ -1,14 +1,12 @@
-<h2>New Maintenance Request</h2>
 
-<div class="button-container ticket-list-button">
-  <a routerLink="/maintenance/ticket-list">
-    <button type="button">View Tickets</button>
-  </a>
-</div>
+
 
 <div class="maintenance-form-container">
+  <h2>New Maintenance Request</h2>
+
 
   <form (ngSubmit)="submitRequest(maintenanceForm)" #maintenanceForm="ngForm">
+
 
 
 
@@ -101,6 +99,11 @@
       </button>
     </div>
 
+      <div class="button-container ticket-list-button">
+  <a routerLink="/maintenance/ticket-list">
+    <button type="button">View Tickets</button>
+  </a>
+</div>
   </form>
 
 </div>
