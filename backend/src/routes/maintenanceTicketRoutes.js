@@ -17,11 +17,12 @@ const router = express.Router();
 
 router.post('/create', requireAuth, requireRole('student', 'admin', 'maintenance'), createTicket);
 
-router.get('/my-tickets', requireAuth, requireRole('student'), getMyTickets);
-
+router.get('/my-tickets', requireAuth, requireRole('student', 'admin'), getMyTickets);
 router.get('/ra-tickets', requireAuth,requireRole('ra'), getRaTickets);
 
 router.get('/assigned-tickets', requireAuth,requireRole('maintenance'), getAssignedTickets);
+
+//add get-by-id route
 
 router.get('/all', requireAuth, requireRole('admin'), getAllMaintenanceTickets);
 

@@ -14,7 +14,7 @@ export const createTicket = async (req, res) => {
             student: studentId,
             universityId: student.universityId || 'N/A',
             buildingId: student.housing?.building || 'N/A',
-            floorId: student.housing?.floor || 'N/A',
+            floorId: student.housing?.floor || 'N/A', //need to update user model to include building and floor info for this to work
             roomId: student.housing?.roomNumber || 'N/A',
             location: req.body.location,
             description: req.body.description,
@@ -106,8 +106,9 @@ export const updateTicketStatus = async (req, res) => {
 
     const populated = await ticket.populate('assignedTo', 'name')
 
-    res.json(ticket);
+    res.json(populated);
 }
+
 
 export const assignTicketToSelf = async (req, res) => {
     try {
