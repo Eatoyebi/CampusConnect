@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 const allowedOrigins = [
-  process.env.FRONTEND_ORIGIN,
+  "https://campusconnect-4jxl.onrender.com", // Add your Render URL here
   "http://localhost:4200",
 ].filter(Boolean);
 
