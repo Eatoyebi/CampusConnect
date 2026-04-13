@@ -13,49 +13,49 @@ export class TicketService {
     constructor(private http: HttpClient) {}
 
     createTicket(data: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}/create`, data);
+        return this.http.post(`${this.baseUrl}/create`, data, { withCredentials: true });
     }
 
     // read ticket functions
     getAllTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(this.baseUrl);
+        return this.http.get<Ticket[]>(this.baseUrl, { withCredentials: true });
     }
 
     getMyTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(`${this.baseUrl}/my-tickets`);
+        return this.http.get<Ticket[]>(`${this.baseUrl}/my-tickets`, { withCredentials: true });
     }
 
     getAssignedTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(`${this.baseUrl}/assigned-tickets`);
+        return this.http.get<Ticket[]>(`${this.baseUrl}/assigned-tickets`, { withCredentials: true });
     }
 
     getUnassignedTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(`${this.baseUrl}/unassigned-tickets`);
+        return this.http.get<Ticket[]>(`${this.baseUrl}/unassigned-tickets`, { withCredentials: true });
     }
 
     getAllResidentTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(`${this.baseUrl}/all-tickets`);
+        return this.http.get<Ticket[]>(`${this.baseUrl}/all-tickets`, { withCredentials: true });
     }
 
     getTicketById(id: string): Observable<Ticket> {
-        return this.http.get<Ticket>(`${this.baseUrl}/${id}`);
+        return this.http.get<Ticket>(`${this.baseUrl}/${id}`, { withCredentials: true });
     }
 
     // update ticket functions
     assignTicket(ticketId: string): Observable<any> {
-        return this.http.patch(`${this.baseUrl}/${ticketId}/assign`, {})
+        return this.http.patch(`${this.baseUrl}/${ticketId}/assign`, {}, { withCredentials: true })
     }
 
     updateTicketStatus(ticketId: string, status: string): Observable<any> {
-        return this.http.patch(`${this.baseUrl}/${ticketId}/status`, { status });
+        return this.http.patch(`${this.baseUrl}/${ticketId}/status`, { status }, { withCredentials: true });
     }
 
     addNote(ticketId: string, text: string): Observable<any> {
-        return this.http.post(`${this.baseUrl}/${ticketId}/notes`, { text });
+        return this.http.post(`${this.baseUrl}/${ticketId}/notes`, { text }, { withCredentials: true });
     }
 
     // delete ticket functions
     deleteTicket(ticketId: string): Observable<any> {
-        return this.http.delete(`${this.baseUrl}/${ticketId}`);
+        return this.http.delete(`${this.baseUrl}/${ticketId}`, { withCredentials: true });
     }
     }

@@ -5,33 +5,29 @@ import User from '../models/User.js'
 
 export const createTicket = async (req, res) => {
     try {
-        const studentId = req.user.id;
+        const studentId = req.user._id;
 
         const student = await User.findById(studentId);
         if (!student) return res.status(404).json({ message: 'Student not found' });
 
         const request = await MaintenanceTicket.create({
-        student: studentId,
-        universityId: student.universityId || 'N/A',
-        
-        buildingId: student.studentInfo?.housing?.building || 'N/A',
-        floorId: student.studentInfo?.housing?.floor || 'N/A',
-        roomId: student.studentInfo?.housing?.roomId || 'N/A',
-        location: req.body.location,
-        description: req.body.description,
-        category: req.body.category,
-        priority: req.body.priority,
-        emergency: req.body.emergency
-    });
-     res.status(201).json(request);
-} catch(err) {
-    console.error('createTicket error:', err);
-    res.status(500).json({ message: 'Server error while creating maintenance request' });
+            student: studentId,
+            universityId: student.universityId || 'N/A',
+            buildingId: student.housing?.building || 'N/A',
+            floorId: student.housing?.floor || 'N/A',
+            roomId: student.housing?.roomNumber || 'N/A',
+            location: req.body.location,
+            description: req.body.description,
+            category: req.body.category,
+            priority: req.body.priority,
+            emergency: req.body.emergency
+        });
+        res.status(201).json(request);
+    } catch(err) {
+        console.error('createTicket error:', err);
+        res.status(500).json({ message: 'Server error while creating maintenance request' });
     }
 };
-
-    
-
 
 //admin view
 export const getAllMaintenanceTickets = async (req, res) => {
@@ -45,7 +41,7 @@ export const getAllMaintenanceTickets = async (req, res) => {
 //student view of their own maintenance requests
 export const getMyTickets = async (req, res) => {
     const tickets = await MaintenanceTicket.find({
-        student: req.user.id
+        student: req.user._id
     })
     .populate('assignedTo', 'name email');
      res.json(tickets);
@@ -77,7 +73,7 @@ export const getUnassignedTickets = async (req, res) => {
 
 export const getAssignedTickets = async (req, res) => {
     const tickets = await MaintenanceTicket.find({
-        assignedTo: req.user.id
+        assignedTo: req.user._id
     })
     .populate('student', 'name')
     .sort({ emergency: -1, priority: -1, createdAt: 1 });
@@ -125,7 +121,7 @@ if(ticket.assignedTo) {
     return res.status(400).json({ message: 'Ticket already assigned'})
 }
 
-ticket.asssignedTo = req.user.id;
+ticket.asssignedTo = req.user._id;
 ticket.status = 'Assigned';
 
 await ticket.save();

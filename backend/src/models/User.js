@@ -47,14 +47,13 @@ const UserSchema = new mongoose.Schema(
     bio: { type: String },
     profileImage: { type: String },
 
-    housing: {
-      building: String,
-      roomNumber: String,
+  housing: {
+    building: String,
+    roomNumber: String,
 
-      ra: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-      }
+    ra: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     }
   },
 

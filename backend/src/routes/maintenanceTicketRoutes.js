@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import requireAuth  from '../../middleware/requireAuth.js';
-import { requireRole } from  '../../middleware/requireRole.js';
+import  requireRole  from  '../../middleware/requireRole.js';
 import {
     createTicket,
     getMyTickets,
@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.post('/create', requireAuth, requireRole('student'), createTicket);
+router.post('/create', requireAuth, requireRole('student', 'admin', 'maintenance'), createTicket);
 
 router.get('/my-tickets', requireAuth, requireRole('student'), getMyTickets);
 

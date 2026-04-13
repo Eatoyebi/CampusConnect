@@ -30,8 +30,17 @@ export class Maintenance {
  submitRequest(form: NgForm) {
   if (!form.valid) return;
 
-  this.ticketService.createTicket(this.newRequest).subscribe(() => {
-    form.resetForm();
+  this.ticketService.createTicket(this.newRequest).subscribe({
+    next: () => {
+      alert('Maintenance request submitted successfully!');
+      form.resetForm();
+      // Navigate to ticket list so user sees the new ticket
+      this.router.navigate(['/maintenance/ticket-list']);
+    },
+    error: (err) => {
+      console.error('Error submitting request:', err);
+      alert('Failed to submit request. Please try again.');
+    }
   });
 }
 }
