@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -46,18 +47,37 @@ const UserSchema = new mongoose.Schema(
     bio: { type: String },
     profileImage: { type: String },
 
-    housing: {
-      building: { type: String },
-      roomNumber: { type: String },
-      raId: { type: String },
-    },
+  housing: {
+    building: String,
+    roomNumber: String,
 
-    raAssignment: {
-      building: { type: String },
-      floor: { type: String },
-    },
+    ra: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
   },
-  { timestamps: true }
+
+  raInfo: {
+    building: String,
+    floor: String
+  },
+
+  maintenanceInfo: {
+    department: String,
+    jobTitle: String,
+    phoneNumber: String
+  },
+
+  bio: {
+    type: String,
+    maxlength: 500
+  },
+
+  profileImage: String
+},
+{
+  timestamps: true
+}
 );
 
 // Uniqueness per university

@@ -1,48 +1,46 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import {RouterModule} from '@angular/router';
+import { TicketService } from '../../shared/services/ticket.service';
 
-
-interface MaintenanceRequest {
-    name: string;
-    mNumber: string;
-    location: string
-    description: string;
-    status: string; 
-}
 @Component({
   selector: 'app-maintenance',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './maintenance.html',
-  styleUrl: './maintenance.css'
+  styleUrls: ['./maintenance.css']
 })
-
-
 export class Maintenance {
 
-    newRequest: MaintenanceRequest = { //object to hold new request data
-    name: '',
-    mNumber: '',
-    location: '',
+  constructor(
+    private ticketService: TicketService,
+    private router: Router
+  ) {}
+
+  newRequest = {
     description: '',
-    status: 'Pending'
-  }; 
+    location: '',
+    category: '',
+    priority: '',
+    emergency: false
+  };
 
-  requests: MaintenanceRequest[] = []; //array of requests
+ submitRequest(form: NgForm) {
+  if (!form.valid) return;
 
-submitRequest(form: NgForm) {
-  //Logic to submit maintenance request
-    if (form.valid)  //are all fields filled?
-      { 
-      this.newRequest.status = 'Pending'; //set status to pending when a new ticket is submitted
-      this.requests.push({ ...this.newRequest }); //add new request to requests array
-      this.newRequest = { 
-        name: '', 
-        mNumber: '', location: '', 
-        description: '', 
-        status: 'Pending'
-      }; //reset form
-      form.resetForm(); //reset form validation state
-  }
-  }
+  this.ticketService.createTicket(this.newRequest).subscribe({
+    next: () => {
+      alert('Maintenance request submitted successfully!');
+      form.resetForm();
+      // Navigate to ticket list so user sees the new ticket
+      this.router.navigate(['/maintenance/ticket-list']);
+    },
+    error: (err) => {
+      console.error('Error submitting request:', err);
+      alert('Failed to submit request. Please try again.');
+    }
+  });
+}
 }

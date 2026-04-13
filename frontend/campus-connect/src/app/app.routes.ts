@@ -42,6 +42,12 @@ export const routes: Routes = [
   },
 
   {
+    path: 'maintenance/ticket-list',
+    canActivate: [roleGuard],
+    data: { roles: ['student', 'ra', 'admin', 'maintenance'] },
+    loadComponent: () => import('./pages/maintenance/ticket-list/ticket-list').then(m => m.TicketList)
+  },
+  {
     path: 'profile',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/user-profile/user-profile.component').then(m => m.UserProfileComponent)

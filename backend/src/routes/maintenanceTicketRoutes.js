@@ -1,35 +1,42 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { createMaintenanceTicket, getallMaintenanceTickets, updateTicketStatus } from '../controllers/MaintenanceTicketController.js';
+import requireAuth  from '../../middleware/requireAuth.js';
+import  requireRole  from  '../../middleware/requireRole.js';
+import {
+    createTicket,
+    getMyTickets,
+    getRaTickets,
+    getAssignedTickets,
+    getAllMaintenanceTickets,
+    updateTicketStatus,
+    assignTicketToSelf,
+    getUnassignedTickets
+} from '../controllers/maintenanceTicketController.js';
 
 const router = express.Router();
 
-// Route to create a new maintenance ticket
-// POST /api/maintenance-tickets
-router.post(
-    '/',
-    [
-        body('name').trim().notEmpty().withMessage('Name is required'),
-        body('mNumber').trim().notEmpty().withMessage('M-Number is required')            
-            .matches((/^M\d{9}$/)).withMessage('Invalid M-Number format'),
-        body('location').trim().notEmpty().withMessage('Location is required'),
-        body('description').trim().notEmpty().withMessage('Description is required'),
-        body('priority').optional().isIn(['Low', 'Medium', 'High']).withMessage('Invalid priority value'),
-        body('assignedTo').optional().trim(),
-        body('attachments').optional().isArray().withMessage('Attachments must be an array of strings'),
-    ],
-    createMaintenanceTicket
-);
+router.post('/create', requireAuth, requireRole('student', 'admin', 'maintenance'), createTicket);
+
+router.get('/my-tickets', requireAuth, requireRole('student', 'admin'), getMyTickets);
+router.get('/ra-tickets', requireAuth,requireRole('ra'), getRaTickets);
+
+router.get('/assigned-tickets', requireAuth,requireRole('maintenance'), getAssignedTickets);
+
+//add get-by-id route
+
+router.get('/all', requireAuth, requireRole('admin'), getAllMaintenanceTickets);
+
+router.patch('/:id/status', requireAuth, requireRole('ra', 'maintenance'), updateTicketStatus);
+
+router.patch('/:id/assign', requireAuth, requireRole('maintenance'), assignTicketToSelf);
+
+router.get(
+    '/unassigned',
+    requireAuth,
+    requireRole('ra', 'maintenance'),
+    getUnassignedTickets
+)
 
 
-// GET /api/maintenance-tickets
-
-router.get('/', getallMaintenanceTickets);
-
-// PATCH /api/maintenance-tickets/:id/status
-router.patch('/:id/status', [
-    body('status').optional().isIn(['Pending', 'In Progress', 'Completed/Closed']).withMessage('Invalid status value'),
-    ],
-    updateTicketStatus);
 
 export default router;
