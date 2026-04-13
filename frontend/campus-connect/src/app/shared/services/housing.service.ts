@@ -8,7 +8,7 @@ export interface Room { _id: string; floorId: string; roomNumber: string; buildi
 
 @Injectable({ providedIn: 'root' })
 export class HousingService {
-  private api = 'http://localhost:5050/api';
+  private api = 'https://campusconnect-4jxl.onrender.com';
 
   constructor(private http: HttpClient) {}
 
