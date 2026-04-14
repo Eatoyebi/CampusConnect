@@ -114,6 +114,14 @@ router.put("/:id/assign-room", async (req, res) => {
   }
 });
 
-
+router.get("/admin/users", async (req, res) => {
+  try {
+    const users = await User.find({}).lean();
+    return res.json(users);
+  } catch (err) {
+    console.error("Admin user fetch error:", err);
+    return res.status(500).json({ message: "Error fetching admin users" });
+  }
+});
 
 export default router;
