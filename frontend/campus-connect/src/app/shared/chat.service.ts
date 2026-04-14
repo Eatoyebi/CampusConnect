@@ -27,10 +27,10 @@ export class ChatService {
   private myId$ = new BehaviorSubject<string | null>(null);
   private history$ = new BehaviorSubject<ChatMsg[]>([]);
 
-  private apiBase = 'http://localhost:5050';
+  private apiBase = 'https://campusconnect-4jxl.onrender.com';
 
   constructor() {
-    this.socket = io('http://localhost:5050', { transports: ['websocket'] });
+    this.socket = io('https://campusconnect-4jxl.onrender.com', { transports: ['websocket'] });
 
     this.socket.on('connect', () => {
       this.myId$.next(this.socket.id ?? null);
