@@ -124,4 +124,25 @@ router.get("/admin/users", async (req, res) => {
   }
 });
 
+// GET 
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.q;
+    if (!query) return res.json([]);
+
+    const students = await User.find({
+      role: "student",
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } }
+      ]
+    }).limit(10).lean();
+
+    res.json(students);
+  } catch (err) {
+    console.error("Student search error:", err);
+    res.status(500).json({ message: "Failed to search students." });
+  }
+});
+
 export default router;
