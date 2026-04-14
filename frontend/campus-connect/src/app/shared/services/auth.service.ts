@@ -17,7 +17,7 @@ export type AuthedUser = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiBase = 'https://campusconnect-4jxl.onrender.com/api/students';
+ private apiBase = 'https://campusconnect-4jxl.onrender.com/api/auth';
 
   private userSubject = new BehaviorSubject<AuthedUser | null>(null);
   user$ = this.userSubject.asObservable();
