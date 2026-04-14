@@ -40,7 +40,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private apiUrl = '/api/users'; to private apiUrl = 'https://campusconnect-4jxl.onrender.com/api/students';
+  private apiUrl = 'https://campusconnect-4jxl.onrender.com/api/students';
   private authUrl = 'https://campusconnect-4jxl.onrender.com/api/students';
 
   constructor(private http: HttpClient) {}
