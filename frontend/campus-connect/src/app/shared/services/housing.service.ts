@@ -1,30 +1,28 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-export interface Building { _id: string; name: string; universityId: string; }
-export interface Floor { _id: string; buildingId: string; universityId?: string; number: number;   name?: string;  }
-export interface Room { _id: string; floorId: string; roomNumber: string; buildingId?: any; }
-
 @Injectable({ providedIn: 'root' })
 export class HousingService {
-  private api = 'https://campusconnect-4jxl.onrender.com/api/buildings';
+  private api = 'https://campusconnect-4jxl.onrender.com/api';
+  
+  private studentApi = 'https://campusconnect-4jxl.onrender.com/api/students';
 
   constructor(private http: HttpClient) {}
 
   getBuildings(): Observable<Building[]> {
+    // Hits: /api/buildings
     return this.http.get<Building[]>(`${this.api}/buildings`);
   }
 
   getFloors(buildingId: string): Observable<Floor[]> {
+    // Hits: /api/floors
     return this.http.get<Floor[]>(`${this.api}/floors`, { params: { buildingId } });
   }
 
   getRooms(floorId: string): Observable<Room[]> {
+    // Hits: /api/rooms
     return this.http.get<Room[]>(`${this.api}/rooms`, { params: { floorId } });
   }
 
   assignRoom(studentUserId: string, roomId: string) {
-    return this.http.put(`${this.api}/${studentUserId}/assign-room`, { roomId });
+    // Hits: /api/students/[ID]/assign-room
+    return this.http.put(`${this.studentApi}/${studentUserId}/assign-room`, { roomId });
   }
 }
