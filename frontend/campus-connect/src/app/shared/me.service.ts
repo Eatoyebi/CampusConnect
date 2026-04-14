@@ -22,7 +22,7 @@ export type MeUser = {
 
 @Injectable({ providedIn: 'root' })
 export class MeService {
-  private baseUrl = 'http://localhost:5050';
+  private baseUrl = 'https://campusconnect-4jxl.onrender.com';
 
   async getMe(): Promise<MeUser> {
     const url = `${this.baseUrl}/api/auth/me`;
