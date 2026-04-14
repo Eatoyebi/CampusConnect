@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class AnnouncementsApi {
-  private baseUrl = "http://localhost:5050/api/announcements";
+  private baseUrl = "https://campusconnect-4jxl.onrender.com/api/announcements";
 
   constructor(private http: HttpClient) {}
 
