@@ -16,7 +16,7 @@ export class AnnouncementsService {
   constructor(private http: HttpClient) {}
 
     getAnnouncements(): Observable<Announcement[]> {
-      return this.http.get<any[]>('http://localhost:5050/api/announcements').pipe(
+      return this.http.get<any[]>('https://campusconnect-4jxl.onrender.com/api/announcements').pipe(
         map(items =>
           items.map(a => ({
             id: a._id ?? a.id,
