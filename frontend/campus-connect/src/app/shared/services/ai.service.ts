@@ -6,7 +6,7 @@ type AiRole = 'student' | 'ra' | 'admin';
 
 @Injectable({ providedIn: 'root' })
 export class AiService {
-  private readonly baseUrl = 'https://campusconnect-4jxl.onrender.com';
+  private readonly baseUrl = 'https://campusconnect-4jxl.onrender.com/api/ai';
 
   constructor(private http: HttpClient) {}
 
