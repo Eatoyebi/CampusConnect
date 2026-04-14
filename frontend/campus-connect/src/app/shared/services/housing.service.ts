@@ -25,6 +25,6 @@ export class HousingService {
   }
 
   assignRoom(studentUserId: string, roomId: string) {
-    return this.http.put(`${this.api}/students/${studentUserId}/assign-room`, { roomId });
+    return this.http.put(`${this.api}/${studentUserId}/assign-room`, { roomId });
   }
 }
