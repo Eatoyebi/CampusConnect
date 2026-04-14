@@ -1,9 +1,14 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Building { _id: string; name: string; universityId: string; }
+export interface Floor { _id: string; buildingId: string; universityId?: string; number: number; name?: string; }
+export interface Room { _id: string; floorId: string; roomNumber: string; buildingId?: any; }
+
 @Injectable({ providedIn: 'root' })
 export class HousingService {
-  // Use 'api' for standalone data (Buildings/Floors/Rooms)
   private api = 'https://campusconnect-4jxl.onrender.com/api';
-  
-  // Use 'studentApi' for the assignment logic
   private studentApi = 'https://campusconnect-4jxl.onrender.com/api/students';
 
   constructor(private http: HttpClient) {}
