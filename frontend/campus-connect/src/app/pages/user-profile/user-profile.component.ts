@@ -154,7 +154,7 @@ export class UserProfileComponent implements OnInit {
     if (s.startsWith('http')) return s;
     if (s.startsWith('/')) return s;
 
-    return `http://localhost:5050/uploads/${s}`;
+    return `https://campusconnect-4jxl.onrender.com/uploads/${s}`;
   }
 
   getPreviewImageUrl(): string | null {
