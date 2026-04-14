@@ -138,10 +138,10 @@ router.get("/search", async (req, res) => {
       ]
     }).limit(10).lean();
 
-    res.json(students);
+    return res.json(students);
   } catch (err) {
-    console.error("Student search error:", err);
-    res.status(500).json({ message: "Failed to search students." });
+    console.error("Search Error:", err);
+    return res.status(500).json({ message: "Search failed" });
   }
 });
 
